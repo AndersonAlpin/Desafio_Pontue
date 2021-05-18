@@ -1,14 +1,8 @@
 <template>
-  <div id="login">
-    <div class="logo">
-      <b-image
-            src="https://pontue.com.br/wp-content/uploads/2018/05/PONTUE-H-2.png"
-        ></b-image>
-    </div>
-
+  <div id="login" class="container is-fullhd">
     <div class="box">
       <b-field label="Login">
-        <b-input />
+        <b-input type="text" />
       </b-field>
 
       <b-field label="Senha">
@@ -26,7 +20,6 @@ export default {};
 
 <style scoped>
 #login {
-  width: 100vw;
   height: 100vh;
   background-image: linear-gradient(
     129deg,
@@ -50,11 +43,5 @@ export default {};
 .box .button {
   background-color: #53278c;
   color: #fff;
-}
-
-.logo {
-  position: absolute;
-  top: 100px;
-  width: 200px;
 }
 </style>
