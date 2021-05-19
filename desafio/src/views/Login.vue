@@ -34,8 +34,7 @@ export default {
         })
         .then((res) => {
           localStorage.setItem("token", res.data.access_token);
-          // this.$router.push({ name: "Home" });
-          console.log(res);
+          this.$router.push({ name: "Home" });
         })
         .catch((err) => {
           let msgError = err.message;
