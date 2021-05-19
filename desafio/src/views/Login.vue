@@ -1,21 +1,49 @@
 <template>
   <div id="login" class="container is-fullhd">
     <div class="box">
-      <b-field label="Login">
-        <b-input type="text" />
+      <b-field label="E-mail">
+        <b-input type="text" v-model="email" />
       </b-field>
 
       <b-field label="Senha">
-        <b-input type="password" password-reveal />
+        <b-input type="password" v-model="password" password-reveal />
       </b-field>
 
-      <b-button class="button" expanded>Entrar</b-button>
+      <b-button class="button" @click="efetuarLogin" expanded>Entrar</b-button>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import axios from "axios";
+import BASE_URL from "@/api/url";
+
+export default {
+  data() {
+    return {
+      email: "juliana.cerqueira@pontue.com.br",
+      password: "123456@pontue",
+    };
+  },
+  methods: {
+    efetuarLogin() {
+      axios
+        .post(`${BASE_URL}auth/login`, {
+          email: this.email,
+          password: this.password,
+        })
+        .then((res) => {
+          localStorage.setItem("token", res.data.access_token);
+          // this.$router.push({ name: "Home" });
+          console.log(res);
+        })
+        .catch((err) => {
+          let msgError = err.message;
+          console.log(msgError);
+        });
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -35,6 +63,7 @@ export default {};
 .box {
   width: 375px;
   height: 275px;
+  margin: 5px;
   background-color: #fff;
 
   text-align: left;
