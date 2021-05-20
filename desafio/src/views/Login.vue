@@ -9,7 +9,7 @@
         <b-input type="password" v-model="password" password-reveal />
       </b-field>
 
-      <b-button class="button" @click="efetuarLogin" expanded>Entrar</b-button>
+      <b-button class="button" @click="login" expanded>Entrar</b-button>
     </div>
   </div>
 </template>
@@ -26,10 +26,11 @@ export default {
       password: "123456@pontue",
       role: "",
       token: "",
+      aluno_id: ""
     };
   },
   methods: {
-    efetuarLogin() {
+    login() {
       axios
         .post(`${BASE_URL}auth/login`, {
           email: this.email,
@@ -38,7 +39,8 @@ export default {
         .then((res) => {
           this.role = res.data.aluno_id ? "aluno" : "admin";
           this.token = res.data.access_token;
-          setLocalStorage(this.token, this.role);
+          this.aluno_id = res.data.aluno_id;
+          setLocalStorage(this.token, this.role, this.aluno_id);
 
           if (this.role == "admin") {
             this.$router.push({ name: "Admin" });
@@ -51,10 +53,6 @@ export default {
           console.log(msgError);
         });
     },
-    // setLocalStorage(token, role) {
-    //   let keyUser = { token, role };
-    //   localStorage.setItem("keyUser", JSON.stringify(keyUser));
-    // },
   },
 };
 </script>

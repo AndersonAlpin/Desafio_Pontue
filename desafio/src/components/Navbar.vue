@@ -14,7 +14,7 @@
 
         <div class="user-logged">
           <b-navbar-dropdown :label="name">
-            <b-navbar-item> Sair </b-navbar-item>
+            <b-navbar-item @click="logout" > Sair </b-navbar-item>
           </b-navbar-dropdown>
         </div>
       </b-navbar-item>
@@ -24,7 +24,7 @@
 
 <script>
 export default {
-  props: ["name"],
+  props: ["name", "logout"],
 };
 </script>
 

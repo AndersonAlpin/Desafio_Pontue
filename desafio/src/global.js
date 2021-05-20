@@ -1,9 +1,6 @@
-const keyUserString = localStorage.getItem('keyUser')
-const keyUser = JSON.parse(keyUserString)
-
-const setLocalStorage = function(token, role) {
-  let keyUser = { token, role };
-  localStorage.setItem("keyUser", JSON.stringify(keyUser));
+const setLocalStorage = (token, role, aluno_id) => {
+  let userKey = { token, role, aluno_id };
+  localStorage.setItem("userKey", JSON.stringify(userKey));
 }
 
-module.exports = { keyUser, setLocalStorage }
+module.exports = { setLocalStorage }

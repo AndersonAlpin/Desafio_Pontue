@@ -12,17 +12,31 @@ const routes = [
     path: '/',
     name: 'Login',
     component: Login,
+    beforeEnter: (to, from, next) => {
+      let json = localStorage.getItem('userKey')
+      let userKey = JSON.parse(json)
+
+      if (userKey && userKey.token != undefined) {
+        if (userKey.role == 'aluno') {
+          next('/student');
+        } else {
+          next('/admin');
+        }
+      } else {
+        next();
+      }
+    }
   },
   {
     path: '/student',
     name: 'Student',
     component: Student,
     beforeEnter: (to, from, next) => {
-      let keyUserString = localStorage.getItem('keyUser')
-      let keyUser = JSON.parse(keyUserString)
+      let json = localStorage.getItem('userKey')
+      let userKey = JSON.parse(json)
 
-      if (keyUser.token != undefined) {
-        if (keyUser.role == 'aluno') {
+      if (userKey && userKey.token != undefined) {
+        if (userKey.role == 'aluno') {
           next();
         } else {
           next('/admin');
@@ -37,11 +51,11 @@ const routes = [
     name: 'Admin',
     component: Admin,
     beforeEnter: (to, from, next) => {
-      let keyUserString = localStorage.getItem('keyUser')
-      let keyUser = JSON.parse(keyUserString)
+      let json = localStorage.getItem('userKey')
+      let userKey = JSON.parse(json)
 
-      if (keyUser.token != undefined) {
-        if (keyUser.role == 'admin') {
+      if (userKey && userKey.token != undefined) {
+        if (userKey.role == 'admin') {
           next();
         } else {
           next('/student');
