@@ -17,12 +17,15 @@
 <script>
 import axios from "axios";
 import BASE_URL from "@/api/url";
+import { setLocalStorage } from "@/global.js"
 
 export default {
   data() {
     return {
       email: "juliana.cerqueira@pontue.com.br",
       password: "123456@pontue",
+      role: "",
+      token: "",
     };
   },
   methods: {
@@ -33,14 +36,25 @@ export default {
           password: this.password,
         })
         .then((res) => {
-          localStorage.setItem("token", res.data.access_token);
-          this.$router.push({ name: "Home" });
+          this.role = res.data.aluno_id ? "aluno" : "admin";
+          this.token = res.data.access_token;
+          setLocalStorage(this.token, this.role);
+
+          if (this.role == "admin") {
+            this.$router.push({ name: "Admin" });
+          } else {
+            this.$router.push({ name: "Student" });
+          }
         })
         .catch((err) => {
           let msgError = err.message;
           console.log(msgError);
         });
     },
+    // setLocalStorage(token, role) {
+    //   let keyUser = { token, role };
+    //   localStorage.setItem("keyUser", JSON.stringify(keyUser));
+    // },
   },
 };
 </script>

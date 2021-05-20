@@ -1,11 +1,8 @@
 <template>
-  <b-navbar type="is-primary" mobile-burger="true">
+  <b-navbar type="is-primary" mobile-burger>
     <template #brand>
       <b-navbar-item tag="router-link" :to="{ path: '/' }">
-        <img
-          src="@/assets/pontue-logo3.png"
-          alt="Pontue"
-        />
+        <img src="@/assets/pontue-logo3.png" alt="Pontue" />
       </b-navbar-item>
     </template>
 
@@ -16,7 +13,7 @@
         </div>
 
         <div class="user-logged">
-          <b-navbar-dropdown label="João Teste">
+          <b-navbar-dropdown :label="name">
             <b-navbar-item> Sair </b-navbar-item>
           </b-navbar-dropdown>
         </div>
@@ -26,7 +23,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: ["name"],
+};
 </script>
 
 <style>
