@@ -1,7 +1,19 @@
 <template>
   <div id="student">
     <Navbar :name="name" :logout="logout" />
-    <h1 class="title">Área do Aluno</h1>
+    <h1 class="title page-title">Minhas Redações</h1>
+
+    <template>
+      <b-tabs id="tabs" type="is-toggle" expanded>
+        <b-tab-item label="Redações" icon="book-open">
+          <h1 class="title">Lista</h1>
+        </b-tab-item>
+        <b-tab-item label="Adicionar" icon="plus-circle">
+          <h1 class="title">Cadastro</h1>
+        </b-tab-item>
+        <b-tab-item label="Visualizar" icon="eye" :visible="false"></b-tab-item>
+      </b-tabs>
+    </template>
   </div>
 </template>
 
@@ -49,4 +61,11 @@ export default {
 </script>
 
 <style>
+.page-title {
+  margin: 20px 0;
+}
+
+#tabs {
+  padding: 20px 100px;
+}
 </style>

@@ -16,8 +16,8 @@
 
 <script>
 import axios from "axios";
-import BASE_URL from "@/api/url";
-import { setLocalStorage } from "@/global.js"
+import urlAPI from "@/api/url";
+import { setLocalStorage } from "@/global.js";
 
 export default {
   data() {
@@ -26,13 +26,13 @@ export default {
       password: "123456@pontue",
       role: "",
       token: "",
-      aluno_id: ""
+      aluno_id: "",
     };
   },
   methods: {
     login() {
       axios
-        .post(`${BASE_URL}auth/login`, {
+        .post(`${urlAPI}auth/login`, {
           email: this.email,
           password: this.password,
         })
@@ -40,17 +40,15 @@ export default {
           this.role = res.data.aluno_id ? "aluno" : "admin";
           this.token = res.data.access_token;
           this.aluno_id = res.data.aluno_id;
+
           setLocalStorage(this.token, this.role, this.aluno_id);
 
-          if (this.role == "admin") {
-            this.$router.push({ name: "Admin" });
-          } else {
-            this.$router.push({ name: "Student" });
-          }
+          this.role == "admin"
+            ? this.$router.push({ name: "Admin" })
+            : this.$router.push({ name: "Student" });
         })
         .catch((err) => {
-          let msgError = err.message;
-          console.log(msgError);
+          console.log(err.message);
         });
     },
   },
