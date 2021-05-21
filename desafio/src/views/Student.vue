@@ -6,7 +6,22 @@
     <template>
       <b-tabs id="tabs" type="is-toggle" expanded>
         <b-tab-item label="Lista" icon="book-open">
-          <Table :redacoes="redacoes" />
+          <Table :redacoes="redacoes">
+            <b-table-column field="id" label="ID" centered v-slot="props">
+              {{ props.row.id }}
+            </b-table-column>
+            <b-table-column
+              field="numero"
+              label="Número"
+              centered
+              v-slot="props"
+            >
+              {{ props.row.numero }}
+            </b-table-column>
+            <b-table-column field="data" label="Data" centered v-slot="props">
+              {{ dateFormat(props.row.created_at) }}
+            </b-table-column>
+          </Table>
         </b-tab-item>
         <b-tab-item
           label="Visualizar"
@@ -27,12 +42,14 @@ import Table from "@/components/Table.vue";
 
 import axios from "axios";
 import urlAPI from "@/api/url";
+import { dateFormat } from "@/global.js"
 import barramento from "@/barramento.js";
 
 export default {
   components: { Navbar, Table },
   data() {
     return {
+      dateFormat,
       aluno_id: "",
       name: "Aluno",
       redacoes: [],
