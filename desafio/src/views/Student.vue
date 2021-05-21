@@ -57,7 +57,7 @@
         <b-tab-item
           label="Visualizar"
           icon="eye"
-          :visible="selected"
+          :visible="visible"
         ></b-tab-item>
 
         <b-tab-item label="Cadastro" icon="plus-circle">
@@ -86,7 +86,7 @@ export default {
       aluno_id: "",
       name: "Aluno",
       redacoes: [],
-      selected: false,
+      visible: false,
     };
   },
   methods: {
@@ -95,7 +95,7 @@ export default {
       this.$router.push({ name: "Login" });
     },
     showTab(value) {
-      this.selected = true;
+      this.visible = true;
       this.currentTab = value;
     },
     showRedacaoUrls(id){
@@ -104,7 +104,7 @@ export default {
   },
   created() {
     barramento.$on("rowSelected", (result) => {
-      this.selected = result;
+      this.visible = result;
     });
 
     let json = localStorage.getItem("userKey");
