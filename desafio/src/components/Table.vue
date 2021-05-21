@@ -61,8 +61,9 @@ import barramento from "@/barramento.js";
 export default {
   props: ["redacoes"],
   data() {
+    let data = {... this.redacoes}
     return {
-      selected: false,
+      selected: data,
       perPage: 5,
       defaultSortDirection: "asc",
       sortIcon: "arrow-up",
@@ -82,13 +83,13 @@ export default {
     },
     rowSelected() {
       setTimeout(() => {
-        barramento.$emit("rowSelected", this.selected);
+        barramento.$emit("rowSelected", true);
       }, 300);
     },
     clearSelection() {
       this.selected = null;
       setTimeout(() => {
-        barramento.$emit("rowSelected", this.selected);
+        barramento.$emit("rowSelected", false);
       }, 300);
     },
   },
