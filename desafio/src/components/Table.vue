@@ -32,9 +32,8 @@
       aria-previous-label="Página anterior"
       aria-page-label="Página"
       :selected.sync="selected"
-      @click="rowSelected"
     >
-    <slot/>
+      <slot />
     </b-table>
   </div>
 </template>
@@ -45,7 +44,7 @@ import barramento from "@/barramento.js";
 export default {
   props: ["redacoes"],
   data() {
-    let data = {... this.redacoes}
+    let data = { ...this.redacoes };
     return {
       selected: data,
       perPage: 5,
@@ -54,16 +53,9 @@ export default {
     };
   },
   methods: {
-    rowSelected() {
-      setTimeout(() => {
-        barramento.$emit("rowSelected", true);
-      }, 300);
-    },
     clearSelection() {
       this.selected = null;
-      setTimeout(() => {
-        barramento.$emit("rowSelected", false);
-      }, 300);
+      barramento.$emit("rowSelected", false);
     },
   },
 };

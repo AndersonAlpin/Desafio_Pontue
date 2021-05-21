@@ -4,7 +4,7 @@
     <h1 class="title page-title">Minhas Redações</h1>
 
     <template>
-      <b-tabs id="tabs" type="is-toggle" expanded>
+      <b-tabs v-model="currentTab" id="tabs" type="is-toggle" expanded>
         <b-tab-item label="Lista" icon="book-open">
           <Table :redacoes="redacoes">
             <b-table-column field="id" label="ID" centered v-slot="props">
@@ -22,13 +22,20 @@
               {{ dateFormat(props.row.created_at) }}
             </b-table-column>
 
-            <b-table-column class="buttons" field="buttons" label="Ações" centered>
+            <b-table-column
+              class="buttons"
+              field="buttons"
+              label="Ações"
+              centered
+              v-slot="props"
+            >
               <div id="buttons" class="buttons">
                 <b-button
                   class="button"
                   type="is-success"
                   icon-right="eye"
-                  name="view"
+                  name="show"
+                  @click="[showTab(1), showRedacaoUrls(props.row.id)]"
                 />
                 <b-button
                   class="button"
@@ -46,11 +53,13 @@
             </b-table-column>
           </Table>
         </b-tab-item>
+
         <b-tab-item
           label="Visualizar"
           icon="eye"
           :visible="selected"
         ></b-tab-item>
+
         <b-tab-item label="Cadastro" icon="plus-circle">
           <h1 class="title">Cadastro</h1>
         </b-tab-item>
@@ -72,6 +81,7 @@ export default {
   components: { Navbar, Table },
   data() {
     return {
+      currentTab: 0,
       dateFormat,
       aluno_id: "",
       name: "Aluno",
@@ -84,6 +94,13 @@ export default {
       localStorage.removeItem("userKey");
       this.$router.push({ name: "Login" });
     },
+    showTab(value) {
+      this.selected = true;
+      this.currentTab = value;
+    },
+    showRedacaoUrls(id){
+      console.log(id);
+    }
   },
   created() {
     barramento.$on("rowSelected", (result) => {
