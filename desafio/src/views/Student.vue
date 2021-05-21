@@ -5,13 +5,17 @@
 
     <template>
       <b-tabs id="tabs" type="is-toggle" expanded>
-        <b-tab-item label="Redações" icon="book-open">
-          <h1 class="title">Lista</h1>
+        <b-tab-item label="Lista" icon="book-open">
+          <Table :redacoes="redacoes" />
         </b-tab-item>
-        <b-tab-item label="Adicionar" icon="plus-circle">
+        <b-tab-item
+          label="Visualizar"
+          icon="eye"
+          :visible="selected"
+        ></b-tab-item>
+        <b-tab-item label="Cadastro" icon="plus-circle">
           <h1 class="title">Cadastro</h1>
         </b-tab-item>
-        <b-tab-item label="Visualizar" icon="eye" :visible="false"></b-tab-item>
       </b-tabs>
     </template>
   </div>
@@ -19,15 +23,20 @@
 
 <script>
 import Navbar from "@/components/Navbar.vue";
+import Table from "@/components/Table.vue";
+
 import axios from "axios";
 import urlAPI from "@/api/url";
+import barramento from "@/barramento.js";
 
 export default {
-  components: { Navbar },
+  components: { Navbar, Table },
   data() {
     return {
       aluno_id: "",
       name: "Aluno",
+      redacoes: [],
+      selected: false,
     };
   },
   methods: {
@@ -37,6 +46,10 @@ export default {
     },
   },
   created() {
+    barramento.$on("rowSelected", (result) => {
+      this.selected = result;
+    });
+
     let json = localStorage.getItem("userKey");
     let userKey = JSON.parse(json);
 
@@ -51,7 +64,7 @@ export default {
     axios
       .get(`${urlAPI}index/aluno/${this.aluno_id}`, req)
       .then((res) => {
-        console.log(res);
+        this.redacoes = res.data.data;
       })
       .catch((err) => {
         console.log(err);
