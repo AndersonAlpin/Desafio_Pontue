@@ -21,6 +21,29 @@
             <b-table-column field="data" label="Data" centered v-slot="props">
               {{ dateFormat(props.row.created_at) }}
             </b-table-column>
+
+            <b-table-column class="buttons" field="buttons" label="Ações" centered>
+              <div id="buttons" class="buttons">
+                <b-button
+                  class="button"
+                  type="is-success"
+                  icon-right="eye"
+                  name="view"
+                />
+                <b-button
+                  class="button"
+                  type="is-warning"
+                  icon-right="file-edit"
+                  name="edit"
+                />
+                <b-button
+                  class="button"
+                  type="is-danger"
+                  icon-right="delete"
+                  name="delete"
+                />
+              </div>
+            </b-table-column>
           </Table>
         </b-tab-item>
         <b-tab-item
@@ -42,7 +65,7 @@ import Table from "@/components/Table.vue";
 
 import axios from "axios";
 import urlAPI from "@/api/url";
-import { dateFormat } from "@/global.js"
+import { dateFormat } from "@/global.js";
 import barramento from "@/barramento.js";
 
 export default {
@@ -97,5 +120,10 @@ export default {
 
 #tabs {
   padding: 20px 100px;
+}
+
+#buttons {
+  display: flex;
+  justify-content: center;
 }
 </style>
