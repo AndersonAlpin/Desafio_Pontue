@@ -32,25 +32,8 @@
       aria-previous-label="Página anterior"
       aria-page-label="Página"
       :selected.sync="selected"
-      @click="rowSelected"
     >
-      <b-table-column field="id" label="ID" centered v-slot="props">
-        {{ props.row.id }}
-      </b-table-column>
-
-      <b-table-column field="numero" label="Número" centered v-slot="props">
-        {{ props.row.numero }}
-      </b-table-column>
-
-      <b-table-column
-        field="created_at"
-        label="Data"
-        sortable
-        centered
-        v-slot="props"
-      >
-        {{ dateFormat(props.row.created_at) }}
-      </b-table-column>
+      <slot />
     </b-table>
   </div>
 </template>
@@ -61,35 +44,18 @@ import barramento from "@/barramento.js";
 export default {
   props: ["redacoes"],
   data() {
+    let data = { ...this.redacoes };
     return {
-      selected: false,
+      selected: data,
       perPage: 5,
       defaultSortDirection: "asc",
       sortIcon: "arrow-up",
     };
   },
   methods: {
-    dateFormat(date_created) {
-      let data = new Date(date_created),
-        dia = data.getDate().toString(),
-        diaF = dia.length == 1 ? "0" + dia : dia,
-        mes = (data.getMonth() + 1).toString(),
-        mesF = mes.length == 1 ? "0" + mes : mes,
-        anoF = data.getFullYear();
-      let hora = data.getHours();
-      let minuto = data.getMinutes();
-      return `${diaF}/${mesF}/${anoF} às ${hora}:${minuto}`;
-    },
-    rowSelected() {
-      setTimeout(() => {
-        barramento.$emit("rowSelected", this.selected);
-      }, 300);
-    },
     clearSelection() {
       this.selected = null;
-      setTimeout(() => {
-        barramento.$emit("rowSelected", this.selected);
-      }, 300);
+      barramento.$emit("rowSelected", false);
     },
   },
 };
