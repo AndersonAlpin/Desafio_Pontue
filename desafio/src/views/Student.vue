@@ -163,7 +163,6 @@ export default {
         .get(`${urlAPI}redacao/${id}`, this.req)
         .then((res) => {
           this.redacao = res.data.data.urls;
-          console.log(this.redacao);
         })
         .catch((err) => {
           console.log(err);
@@ -171,7 +170,6 @@ export default {
     },
     showRedacao(value){
       this.link = value;
-      console.log(this.link);
     }
   },
   created() {
