@@ -20,7 +20,7 @@
     </b-field>
 
     <b-table
-      :data="redacoes"
+      :data="list"
       paginated
       :per-page="perPage"
       pagination-position="bottom"
@@ -42,9 +42,9 @@
 import barramento from "@/barramento.js";
 
 export default {
-  props: ["redacoes"],
+  props: ["list"],
   data() {
-    let data = { ...this.redacoes };
+    let data = { ...this.list };
     return {
       selected: data,
       perPage: 5,

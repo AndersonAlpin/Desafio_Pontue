@@ -5,8 +5,10 @@
 
     <template>
       <b-tabs v-model="currentTab" id="tabs" type="is-toggle" expanded>
-        <b-tab-item label="Lista" icon="book-open">
-          <Table :redacoes="redacoes">
+        <!-- LISTA DE REDAÇÕES -->
+        <b-tab-item label="Lista" icon="book-open" :visible="visibleTab.lista">
+          <Table :list="redacoes">
+            <!-- COLUNAS -->
             <b-table-column field="id" label="ID" centered v-slot="props">
               {{ props.row.id }}
             </b-table-column>
@@ -22,6 +24,7 @@
               {{ dateFormat(props.row.created_at) }}
             </b-table-column>
 
+            <!-- BOTÕES -->
             <b-table-column
               class="buttons"
               field="buttons"
@@ -34,8 +37,60 @@
                   class="button"
                   type="is-success"
                   icon-right="eye"
-                  name="show"
+                  name="showRedacoes"
                   @click="[showTab(1), showRedacaoUrls(props.row.id)]"
+                />
+              </div>
+            </b-table-column>
+          </Table>
+        </b-tab-item>
+
+        <!-- Visualizar Redações -->
+        <b-tab-item
+          label="Visualizar"
+          icon="eye"
+          :visible="visibleTab.visualizar"
+        >
+          <span class="has-text-warning-dark subtitle">A redação será exibida abaixo da tabela!</span>
+          <Table :list="redacao">
+            <!-- COLUNAS -->
+            <b-table-column field="id" label="ID" centered v-slot="props">
+              {{ props.row.id }}
+            </b-table-column>
+
+            <b-table-column
+              field="anotacoes"
+              label="Anotações"
+              centered
+              v-slot="props"
+            >
+              {{ props.row.anotacoes || "Sem anotações" }}
+            </b-table-column>
+
+            <b-table-column
+              field="comentarios"
+              label="Comentários"
+              centered
+              v-slot="props"
+            >
+              {{ props.row.comentarios || "Sem comentários" }}
+            </b-table-column>
+
+            <!-- BOTÕES -->
+            <b-table-column
+              class="buttons"
+              field="buttons"
+              label="Ações"
+              centered
+              v-slot="props"
+            >
+              <div id="buttons" class="buttons">
+                <b-button
+                  class="button"
+                  type="is-success"
+                  icon-right="eye"
+                  name="showRedacao"
+                  @click="showRedacao(props.row.url)"
                 />
                 <b-button
                   class="button"
@@ -52,14 +107,10 @@
               </div>
             </b-table-column>
           </Table>
+          <Redacao :link="link" />
         </b-tab-item>
 
-        <b-tab-item
-          label="Visualizar"
-          icon="eye"
-          :visible="visible"
-        ></b-tab-item>
-
+        <!-- Cadastro de Redações -->
         <b-tab-item label="Cadastro" icon="plus-circle">
           <h1 class="title">Cadastro</h1>
         </b-tab-item>
@@ -71,6 +122,7 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import Table from "@/components/Table.vue";
+import Redacao from "@/components/Redacao.vue";
 
 import axios from "axios";
 import urlAPI from "@/api/url";
@@ -78,15 +130,22 @@ import { dateFormat } from "@/global.js";
 import barramento from "@/barramento.js";
 
 export default {
-  components: { Navbar, Table },
+  components: { Navbar, Table, Redacao },
   data() {
     return {
       currentTab: 0,
       dateFormat,
+      req: [],
       aluno_id: "",
       name: "Aluno",
-      redacoes: [],
-      visible: false,
+      redacoes: [], //Lista de redações
+      redacao: [], //Dados de uma redação
+      link: null, //Link de uma redação selecionada
+      visibleTab: {
+        lista: true,
+        visualizar: false,
+        cadastro: true,
+      },
     };
   },
   methods: {
@@ -95,16 +154,32 @@ export default {
       this.$router.push({ name: "Login" });
     },
     showTab(value) {
-      this.visible = true;
+      this.visibleTab.visualizar = true;
+      this.visibleTab.lista = false;
       this.currentTab = value;
     },
-    showRedacaoUrls(id){
-      console.log(id);
+    showRedacaoUrls(id) {
+      axios
+        .get(`${urlAPI}redacao/${id}`, this.req)
+        .then((res) => {
+          this.redacao = res.data.data.urls;
+          console.log(this.redacao);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    showRedacao(value){
+      this.link = value;
+      console.log(this.link);
     }
   },
   created() {
     barramento.$on("rowSelected", (result) => {
-      this.visible = result;
+      this.visibleTab.visualizar = result;
+      this.visibleTab.lista = true;
+      this.currentTab = 0;
+      this.link = null;
     });
 
     let json = localStorage.getItem("userKey");
@@ -112,14 +187,14 @@ export default {
 
     this.aluno_id = userKey.aluno_id;
 
-    let req = {
+    this.req = {
       headers: {
         Authorization: `Bearer ${userKey.token}`,
       },
     };
 
     axios
-      .get(`${urlAPI}index/aluno/${this.aluno_id}`, req)
+      .get(`${urlAPI}index/aluno/${this.aluno_id}`, this.req)
       .then((res) => {
         this.redacoes = res.data.data;
       })
