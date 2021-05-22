@@ -130,7 +130,7 @@
 
         <!-- Cadastro de Redações -->
         <b-tab-item label="Cadastro" icon="plus-circle">
-          <h1 class="title">Cadastro</h1>
+          
         </b-tab-item>
       </b-tabs>
     </template>
@@ -151,7 +151,7 @@ export default {
   components: { Navbar, Table, Redacao },
   data() {
     return {
-      currentTab: 0,
+      currentTab: 2,
       dateFormat,
       req: [], //Recebe o cabeçalho com o token de autenticação
       aluno_id: "",
