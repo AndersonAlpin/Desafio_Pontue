@@ -7,7 +7,7 @@
       <b-tabs v-model="currentTab" id="tabs" type="is-toggle" expanded>
         <!-- LISTA DE REDAÇÕES -->
         <b-tab-item label="Lista" icon="book-open" :visible="visibleTab.lista">
-          <Table :list="redacoes">
+          <Table :list="redacoes" labelButton="Limpar seleção" colorButton="is-danger" iconButton="close">
             <!-- COLUNAS -->
             <b-table-column field="id" label="ID" centered v-slot="props">
               {{ props.row.id }}
@@ -52,7 +52,12 @@
           :visible="visibleTab.visualizar"
         >
           <span class="has-text-warning-dark subtitle">A redação será exibida abaixo da tabela!</span>
-          <Table :list="redacao">
+          <Table 
+            :list="redacao" 
+            labelButton="Voltar" 
+            colorButton="is-info" 
+            iconButton="arrow-left"
+            activeButton="true">
             <!-- COLUNAS -->
             <b-table-column field="id" label="ID" centered v-slot="props">
               {{ props.row.id }}
