@@ -25,7 +25,13 @@
             >
               {{ props.row.numero }}
             </b-table-column>
-            <b-table-column field="created_at" label="Data" centered sortable v-slot="props">
+            <b-table-column
+              field="created_at"
+              label="Data"
+              centered
+              sortable
+              v-slot="props"
+            >
               {{ dateFormat(props.row.created_at) }}
             </b-table-column>
 
@@ -130,7 +136,54 @@
 
         <!-- Cadastro de Redações -->
         <b-tab-item label="Cadastro" icon="plus-circle">
-          
+          <div id="tab-cadastro">
+            <!-- <b-field class="file">
+              <b-upload v-model="file" expanded>
+                <a class="button is-dark is-fullwidth">
+                  <b-icon icon="upload"></b-icon>
+                  <span>{{ file.name || "Selecionar arquivos" }}</span>
+                </a>
+              </b-upload>
+            </b-field> -->
+            <b-field>
+              <b-upload v-model="files" multiple drag-drop expanded>
+                <section class="section">
+                  <div class="content has-text-centered">
+                    <p>
+                      <b-icon icon="upload" size="is-large"></b-icon>
+                    </p>
+                    <p>
+                      Arraste seus arquivos para cá ou clique para encontra-los
+                    </p>
+                  </div>
+                </section>
+              </b-upload>
+            </b-field>
+
+            <div class="tags">
+              <span
+                v-for="(file, index) in files"
+                :key="index"
+                class="tag is-dark"
+              >
+                {{ file.name }}
+                <button
+                  class="delete is-small"
+                  type="button"
+                  @click="deleteDropFile(index)"
+                ></button>
+              </span>
+            </div>
+
+            <div id="button-upload">
+              <b-button
+                @click="uploadRedacao"
+                type="is-dark"
+                icon-right="file-export"
+                >Enviar</b-button
+              >
+            </div>
+          </div>
         </b-tab-item>
       </b-tabs>
     </template>
@@ -153,12 +206,13 @@ export default {
     return {
       currentTab: 2,
       dateFormat,
-      req: [], //Recebe o cabeçalho com o token de autenticação
       aluno_id: "",
       name: "Aluno",
       redacoes: [], //Lista de redações
       redacao: [], //Dados de uma redação
+      req: [], //Recebe o cabeçalho com o token de autenticação
       link: null, //Link de uma redação selecionada
+      files: [],
       visibleTab: {
         lista: true,
         visualizar: false,
@@ -167,7 +221,8 @@ export default {
     };
   },
   methods: {
-    listRedacoes() { //Listar ID principal das redações
+    listRedacoes() {
+      //Listar ID principal das redações
       axios
         .get(`${urlAPI}index/aluno/${this.aluno_id}`, this.req)
         .then((res) => {
@@ -177,16 +232,19 @@ export default {
           console.log(err);
         });
     },
-    logout() { //Responsável por fazer logout, deletando o token
+    logout() {
+      //Responsável por fazer logout, deletando o token
       localStorage.removeItem("userKey");
       this.$router.push({ name: "Login" });
     },
-    showTab(value) { //Responsável por exibir ou não uma TAB
+    showTab(value) {
+      //Responsável por exibir ou não uma TAB
       this.visibleTab.visualizar = true;
       this.visibleTab.lista = false;
       this.currentTab = value;
     },
-    showRedacaoUrls(id) { //Listar as redações a partir do ID principal
+    showRedacaoUrls(id) {
+      //Listar as redações a partir do ID principal
       axios
         .get(`${urlAPI}redacao/${id}`, this.req)
         .then((res) => {
@@ -196,23 +254,41 @@ export default {
           console.log(err);
         });
     },
-    deleteRedacao(id) { //Deletar uma redação
+    deleteRedacao(id) {
+      //Deletar uma redação
       axios
         .delete(`${urlAPI}redacao/${id}/delete`, this.req)
         .then((res) => {
-          this.listRedacoes
+          this.listRedacoes;
           console.log(res);
         })
         .catch((err) => {
           console.log(err);
         });
     },
-    showRedacao(value) { //Recebe a URL da redação para ser exibida
+    // Enviar uma redação
+    uploadRedacao() {
+      console.log(this.files);
+      // axios
+      //   .post(`${urlAPI}alunos/redacao/create`, this.req)
+      //   .then((res) => {
+      //     console.log(res);
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+    },
+    showRedacao(value) {
+      //Recebe a URL da redação para ser exibida
       this.link = value;
+    },
+    deleteDropFile(index) {
+      this.files.splice(index, 1);
     },
   },
   created() {
-    barramento.$on("rowSelected", (result) => { //Aviso de quando uma linha da tabela é selecionada
+    barramento.$on("rowSelected", (result) => {
+      //Aviso de quando uma linha da tabela é selecionada
       this.visibleTab.visualizar = result;
       this.visibleTab.lista = true;
       this.currentTab = 0;
@@ -255,5 +331,9 @@ export default {
 #buttons {
   display: flex;
   justify-content: center;
+}
+
+#tab-cadastro {
+  margin-top: 20px;
 }
 </style>
