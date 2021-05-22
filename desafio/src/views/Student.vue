@@ -7,7 +7,12 @@
       <b-tabs v-model="currentTab" id="tabs" type="is-toggle" expanded>
         <!-- LISTA DE REDAÇÕES -->
         <b-tab-item label="Lista" icon="book-open" :visible="visibleTab.lista">
-          <Table :list="redacoes" labelButton="Limpar seleção" colorButton="is-danger" iconButton="close">
+          <Table
+            :list="redacoes"
+            labelButton="Limpar seleção"
+            colorButton="is-danger"
+            iconButton="close"
+          >
             <!-- COLUNAS -->
             <b-table-column field="id" label="ID" centered v-slot="props">
               {{ props.row.id }}
@@ -33,6 +38,7 @@
               v-slot="props"
             >
               <div id="buttons" class="buttons">
+                <!-- Mostrar lista de redações -->
                 <b-button
                   class="button"
                   type="is-success"
@@ -40,24 +46,35 @@
                   name="showRedacoes"
                   @click="[showTab(1), showRedacaoUrls(props.row.id)]"
                 />
+                <!-- Deletar redação -->
+                <b-button
+                  class="button"
+                  type="is-danger"
+                  icon-right="delete"
+                  name="delete"
+                  @click="deleteRedacao(props.row.id)"
+                />
               </div>
             </b-table-column>
           </Table>
         </b-tab-item>
 
-        <!-- Visualizar Redações -->
+        <!-- Visualizar redações -->
         <b-tab-item
           label="Visualizar"
           icon="eye"
           :visible="visibleTab.visualizar"
         >
-          <span class="has-text-warning-dark subtitle">A redação será exibida abaixo da tabela!</span>
-          <Table 
-            :list="redacao" 
-            labelButton="Voltar" 
-            colorButton="is-info" 
+          <span class="has-text-warning-dark subtitle"
+            >A redação será exibida abaixo da tabela!</span
+          >
+          <Table
+            :list="redacao"
+            labelButton="Voltar"
+            colorButton="is-info"
             iconButton="arrow-left"
-            activeButton="true">
+            activeButton="true"
+          >
             <!-- COLUNAS -->
             <b-table-column field="id" label="ID" centered v-slot="props">
               {{ props.row.id }}
@@ -90,6 +107,7 @@
               v-slot="props"
             >
               <div id="buttons" class="buttons">
+                <!-- Mostrar redação -->
                 <b-button
                   class="button"
                   type="is-success"
@@ -97,17 +115,12 @@
                   name="showRedacao"
                   @click="showRedacao(props.row.url)"
                 />
+                <!-- Editar redação -->
                 <b-button
                   class="button"
                   type="is-warning"
                   icon-right="file-edit"
                   name="edit"
-                />
-                <b-button
-                  class="button"
-                  type="is-danger"
-                  icon-right="delete"
-                  name="delete"
                 />
               </div>
             </b-table-column>
@@ -140,7 +153,7 @@ export default {
     return {
       currentTab: 0,
       dateFormat,
-      req: [],
+      req: [], //Recebe o cabeçalho com o token de autenticação
       aluno_id: "",
       name: "Aluno",
       redacoes: [], //Lista de redações
@@ -154,16 +167,26 @@ export default {
     };
   },
   methods: {
-    logout() {
+    listRedacoes() { //Listar ID principal das redações
+      axios
+        .get(`${urlAPI}index/aluno/${this.aluno_id}`, this.req)
+        .then((res) => {
+          this.redacoes = res.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    logout() { //Responsável por fazer logout, deletando o token
       localStorage.removeItem("userKey");
       this.$router.push({ name: "Login" });
     },
-    showTab(value) {
+    showTab(value) { //Responsável por exibir ou não uma TAB
       this.visibleTab.visualizar = true;
       this.visibleTab.lista = false;
       this.currentTab = value;
     },
-    showRedacaoUrls(id) {
+    showRedacaoUrls(id) { //Listar as redações a partir do ID principal
       axios
         .get(`${urlAPI}redacao/${id}`, this.req)
         .then((res) => {
@@ -173,12 +196,23 @@ export default {
           console.log(err);
         });
     },
-    showRedacao(value){
+    deleteRedacao(id) { //Deletar uma redação
+      axios
+        .delete(`${urlAPI}redacao/${id}/delete`, this.req)
+        .then((res) => {
+          this.listRedacoes
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    showRedacao(value) { //Recebe a URL da redação para ser exibida
       this.link = value;
-    }
+    },
   },
   created() {
-    barramento.$on("rowSelected", (result) => {
+    barramento.$on("rowSelected", (result) => { //Aviso de quando uma linha da tabela é selecionada
       this.visibleTab.visualizar = result;
       this.visibleTab.lista = true;
       this.currentTab = 0;
@@ -196,6 +230,7 @@ export default {
       },
     };
 
+    // Listar ID principal das redações automaticamente após login
     axios
       .get(`${urlAPI}index/aluno/${this.aluno_id}`, this.req)
       .then((res) => {
