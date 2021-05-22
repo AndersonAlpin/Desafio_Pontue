@@ -3,10 +3,10 @@
     <b-field grouped group-multiline>
       <b-field>
         <b-button
-          label="Limpar Seleção"
-          type="is-danger"
-          icon-left="close"
-          :disabled="!selected"
+          :label="labelButton"
+          :type="colorButton"
+          :icon-left="iconButton"
+          :disabled="!selected && !activeButton"
           @click="clearSelection"
         />
       </b-field>
@@ -20,7 +20,7 @@
     </b-field>
 
     <b-table
-      :data="redacoes"
+      :data="list"
       paginated
       :per-page="perPage"
       pagination-position="bottom"
@@ -42,11 +42,11 @@
 import barramento from "@/barramento.js";
 
 export default {
-  props: ["redacoes"],
+  props: ["list", "labelButton", "colorButton", "iconButton", "activeButton"],
   data() {
-    let data = { ...this.redacoes };
+    let data = { ...this.list };
     return {
-      selected: data,
+      selected: data[1],
       perPage: 5,
       defaultSortDirection: "asc",
       sortIcon: "arrow-up",
