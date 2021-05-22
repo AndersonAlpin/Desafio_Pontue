@@ -25,7 +25,7 @@
             >
               {{ props.row.numero }}
             </b-table-column>
-            <b-table-column field="data" label="Data" centered v-slot="props">
+            <b-table-column field="created_at" label="Data" centered sortable v-slot="props">
               {{ dateFormat(props.row.created_at) }}
             </b-table-column>
 
