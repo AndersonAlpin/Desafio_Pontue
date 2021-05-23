@@ -2,12 +2,27 @@
   <div id="login" class="container is-fullhd">
     <div class="box">
       <b-field label="E-mail">
-        <b-input type="text" v-model="email" />
+        <ValidationProvider name="email" rules="required" v-slot="{ errors }">
+          <b-input type="email" name="email" v-model="emailField" />
+          <span class="message">{{ errors[0] }}</span>
+        </ValidationProvider>
       </b-field>
 
       <b-field label="Senha">
-        <b-input type="password" v-model="password" password-reveal />
+        <ValidationProvider name="email" rules="required" v-slot="{ errors }">
+          <b-input
+            type="password"
+            name="password"
+            v-model="passwordField"
+            password-reveal
+          />
+          <span class="message">{{ errors[0] }}</span>
+        </ValidationProvider>
       </b-field>
+
+      <div class="message-login">
+        <span  v-if="msg" >{{ msg }}</span>
+      </div>
 
       <b-button class="button" @click="login" expanded>Entrar</b-button>
     </div>
@@ -19,22 +34,32 @@ import axios from "axios";
 import urlAPI from "@/api/url";
 import { setLocalStorage } from "@/global.js";
 
+import { ValidationProvider, extend } from "vee-validate";
+import { required } from "vee-validate/dist/rules";
+
+extend("required", {
+  ...required,
+  message: "Este campo é obrigatório",
+});
+
 export default {
+  components: { ValidationProvider },
   data() {
     return {
-      email: "juliana.cerqueira@pontue.com.br",
-      password: "123456@pontue",
+      emailField: "juliana.cerqueira@pontue.com.br",
+      passwordField: "123456@pontue",
       role: "",
       token: "",
       aluno_id: "",
+      msg: "",
     };
   },
   methods: {
     login() {
       axios
         .post(`${urlAPI}auth/login`, {
-          email: this.email,
-          password: this.password,
+          email: this.emailField,
+          password: this.passwordField,
         })
         .then((res) => {
           this.role = res.data.aluno_id ? "aluno" : "admin";
@@ -48,7 +73,7 @@ export default {
             : this.$router.push({ name: "Aluno" });
         })
         .catch((err) => {
-          console.log(err.message);
+          err ? (this.msg = "Login incorreto") : null;
         });
     },
   },
@@ -71,7 +96,6 @@ export default {
 
 .box {
   width: 375px;
-  height: 275px;
   margin: 5px;
   background-color: #fff;
 
@@ -81,5 +105,17 @@ export default {
 .box .button {
   background-color: #53278c;
   color: #fff;
+}
+
+span.message {
+  font-size: 13px;
+  color: rgb(230, 88, 88);
+}
+
+.message-login {
+  font-size: 13px;
+  color: rgb(230, 88, 88);
+  text-align: center;
+  margin-bottom: 10px;
 }
 </style>
