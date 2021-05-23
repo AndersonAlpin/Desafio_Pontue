@@ -81,6 +81,7 @@
             type="is-warning"
             icon-right="file-edit"
             name="edit"
+            @click="editRedacao(props.row.id)"
           />
         </div>
       </b-table-column>
@@ -116,6 +117,9 @@ export default {
     },
     openRedacao(url){
       this.redacaoUrl = url;
+    },
+    editRedacao(id){
+      barramento.$emit("editRedacao", id);
     }
   },
   created() {

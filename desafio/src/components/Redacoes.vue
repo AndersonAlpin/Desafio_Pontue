@@ -85,24 +85,46 @@
 </template>
 
 <script>
-import barramento from "@/barramento.js";
 import { dateFormat } from "@/global.js";
+import barramento from "@/barramento.js";
+import urlAPI from "@/api/url";
+import axios from "axios";
 
 export default {
   props: ["list"],
   data() {
     let data = { ...this.list };
     return {
-      dateFormat,
-      selected: data[1],
-      perPage: 5,
       defaultSortDirection: "asc",
       sortIcon: "arrow-up",
+      selected: data[1],
+      dateFormat,
+      perPage: 5,
     };
   },
   methods: {
     showRedacao(id) {
       barramento.$emit("showRedacao", id);
+    },
+    deleteRedacao(id) {
+      let json = localStorage.getItem("userKey");
+      let userKey = JSON.parse(json);
+
+      let req = {
+        headers: {
+          Authorization: `Bearer ${userKey.token}`,
+        },
+      };
+
+      axios
+        .delete(`${urlAPI}redacao/${id}/delete`, req)
+        .then((res) => {
+          this.listRedacoes;
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };
