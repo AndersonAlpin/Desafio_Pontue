@@ -83,31 +83,30 @@ export default {
         });
     },
     logout() {
-      //Responsável por fazer logout, deletando o token
       localStorage.removeItem("userKey");
       this.$router.push({ name: "Login" });
     },
   },
   created() {
-    barramento.$on("showRedacao", (result) => {
-      result ? (this.currentTab = 1) : (this.currentTab = 0);
+    barramento.quandoExibirTabVisualizar((id) => {
+      id ? (this.currentTab = 1) : (this.currentTab = 0);
       this.visibleTab.visualizar = true;
       this.visibleTab.lista = false;
     });
 
-    barramento.$on("backToLista", (result) => {
+    barramento.quandoVoltarParaLista((result) => {
       result ? (this.currentTab = 0) : (this.currentTab = 1);
       this.visibleTab.visualizar = false;
       this.visibleTab.edicao = false;
       this.visibleTab.lista = true;
     });
 
-    barramento.$on("editRedacao", result => {
+    barramento.quandoEditarRedacao(result => {
       result ? (this.currentTab = 2) : (this.currentTab = 1);
       this.visibleTab.edicao = true;
     })
 
-    barramento.$on("uploadRedacao", result => {
+    barramento.quandoEnviarRedacao(result => {
       result ? (this.currentTab = 1) : (this.currentTab = 1);
       this.visibleTab.edicao = false;
     })

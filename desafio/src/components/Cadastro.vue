@@ -44,6 +44,8 @@ export default {
   },
   methods: {
     uploadRedacao() {
+      console.log(this.file);
+
       let json = localStorage.getItem("userKey");
       let userKey = JSON.parse(json);
 
@@ -54,8 +56,7 @@ export default {
       };
 
       axios
-        .post(`${urlAPI}alunos/redacao/create`, this.file, 
-        req)
+        .post(`${urlAPI}alunos/redacao/create`, this.file, req)
         .then((res) => {
           console.log(res);
         })

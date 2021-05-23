@@ -104,7 +104,7 @@ export default {
   },
   methods: {
     showRedacao(id) {
-      barramento.$emit("showRedacao", id);
+      barramento.exibirTabVisualizar(id);
     },
     deleteRedacao(id) {
       let json = localStorage.getItem("userKey");

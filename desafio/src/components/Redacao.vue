@@ -95,7 +95,7 @@ import barramento from "@/barramento.js";
 import urlAPI from "@/api/url";
 import axios from "axios";
 
-import ViewRedacao from "@/components/ViewRedacao.vue"
+import ViewRedacao from "@/components/ViewRedacao.vue";
 
 export default {
   components: { ViewRedacao },
@@ -111,20 +111,19 @@ export default {
     };
   },
   methods: {
-    backToLista(){
-      barramento.$emit("backToLista", true);
+    backToLista() {
+      barramento.voltarParaLista();
       this.redacao = [];
     },
-    openRedacao(url){
+    openRedacao(url) {
       this.redacaoUrl = url;
     },
-    editRedacao(id){
-      barramento.$emit("editRedacao", id);
-    }
+    editRedacao(id) {
+      barramento.editarRedacao(id);
+    },
   },
   created() {
-    barramento.$on("showRedacao", (result) => {
-      let id = result;
+    barramento.quandoExibirTabVisualizar((id) => {
       let json = localStorage.getItem("userKey");
       let userKey = JSON.parse(json);
 

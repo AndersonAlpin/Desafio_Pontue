@@ -46,6 +46,9 @@ export default {
   },
   methods: {
     uploadRedacao() {
+      console.log(this.file);
+      console.log(this.id);
+
       let json = localStorage.getItem("userKey");
       let userKey = JSON.parse(json);
 
@@ -66,19 +69,19 @@ export default {
         )
         .then((res) => {
           console.log(res);
+          barramento.enviarRedacao();
         })
         .catch((err) => {
           console.log(err);
         });
-      barramento.$emit("uploadRedacao", true);
     },
     deleteDropFile(index) {
       this.file.splice(index, 1);
     },
   },
   created() {
-    barramento.$on("editRedacao", (result) => {
-      this.id = result;
+    barramento.quandoEditarRedacao(id => {
+      this.id = id;
     });
   },
 };
