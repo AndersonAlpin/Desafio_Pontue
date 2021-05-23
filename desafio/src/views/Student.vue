@@ -137,16 +137,8 @@
         <!-- Cadastro de Redações -->
         <b-tab-item label="Cadastro" icon="plus-circle">
           <div id="tab-cadastro">
-            <!-- <b-field class="file">
-              <b-upload v-model="file" expanded>
-                <a class="button is-dark is-fullwidth">
-                  <b-icon icon="upload"></b-icon>
-                  <span>{{ file.name || "Selecionar arquivos" }}</span>
-                </a>
-              </b-upload>
-            </b-field> -->
             <b-field>
-              <b-upload v-model="files" multiple drag-drop expanded>
+              <b-upload v-model="file" multiple drag-drop expanded>
                 <section class="section">
                   <div class="content has-text-centered">
                     <p>
@@ -162,7 +154,7 @@
 
             <div class="tags">
               <span
-                v-for="(file, index) in files"
+                v-for="(file, index) in file"
                 :key="index"
                 class="tag is-dark"
               >
@@ -212,7 +204,7 @@ export default {
       redacao: [], //Dados de uma redação
       req: [], //Recebe o cabeçalho com o token de autenticação
       link: null, //Link de uma redação selecionada
-      files: [],
+      file: [],
       visibleTab: {
         lista: true,
         visualizar: false,
@@ -268,22 +260,22 @@ export default {
     },
     // Enviar uma redação
     uploadRedacao() {
-      console.log(this.files);
-      // axios
-      //   .post(`${urlAPI}alunos/redacao/create`, this.req)
-      //   .then((res) => {
-      //     console.log(res);
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
+      console.log(this.file);
+      axios
+        .post(`${urlAPI}alunos/redacao/create`, this.file, this.req)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     showRedacao(value) {
       //Recebe a URL da redação para ser exibida
       this.link = value;
     },
     deleteDropFile(index) {
-      this.files.splice(index, 1);
+      this.file.splice(index, 1);
     },
   },
   created() {
