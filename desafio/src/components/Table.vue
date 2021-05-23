@@ -42,7 +42,7 @@
 import barramento from "@/barramento.js";
 
 export default {
-  props: ["list", "labelButton", "colorButton", "iconButton", "activeButton"],
+  props: ["list", "labelButton", "colorButton", "iconButton", "activeButton", "action"],
   data() {
     let data = { ...this.list };
     return {
@@ -55,7 +55,7 @@ export default {
   methods: {
     clearSelection() {
       this.selected = null;
-      barramento.$emit("rowSelected", false);
+      barramento.voltarParaLista();
     },
   },
 };

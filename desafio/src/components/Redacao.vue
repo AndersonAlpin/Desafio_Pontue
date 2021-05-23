@@ -1,21 +1,125 @@
 <template>
-  <div id="redacao" v-if="link">
-    <hr />
-    <h1 class="subtitle">Redação</h1>
-    <div class="redacao-borda">
-      <b-image :src="link"></b-image>
-    </div>
+  <div id="redacao">
+    <Table
+      :list="redacao"
+      labelButton="Voltar"
+      colorButton="is-info"
+      iconButton="arrow-left"
+      activeButton="true"
+    >
+      <!-- ID -->
+      <b-table-column field="id" label="ID" centered v-slot="props">
+        {{ props.row.id }}
+      </b-table-column>
+
+      <!-- Anotações -->
+      <b-table-column
+        field="anotacoes"
+        label="Anotações"
+        centered
+        v-slot="props"
+      >
+        {{ props.row.anotacoes || "Sem anotações" }}
+      </b-table-column>
+
+      <!-- Comentários -->
+      <b-table-column
+        field="comentarios"
+        label="Comentários"
+        centered
+        v-slot="props"
+      >
+        {{ props.row.comentarios || "Sem comentários" }}
+      </b-table-column>
+
+      <!-- Botões -->
+      <b-table-column
+        class="buttons"
+        field="buttons"
+        label="Ações"
+        centered
+        v-slot="props"
+      >
+        <div id="buttons" class="buttons">
+          <!-- Mostrar redação -->
+          <b-button
+            class="button"
+            type="is-success"
+            icon-right="eye"
+            name="showRedacao"
+            @click="openRedacao(props.row.url)"
+          />
+          <!-- Editar redação -->
+          <b-button
+            class="button"
+            type="is-warning"
+            icon-right="file-edit"
+            name="edit"
+            @click="editRedacao(props.row.id)"
+          />
+        </div>
+      </b-table-column>
+    </Table>
+    <ViewRedacao :link="redacaoUrl" />
   </div>
 </template>
 
 <script>
+import ViewRedacao from "@/components/ViewRedacao.vue";
+import Table from "@/components/Table.vue";
+
+import barramento from "@/barramento.js";
+import urlAPI from "@/api/url";
+import axios from "axios";
+
 export default {
-  props: ["link"],
+  components: { ViewRedacao, Table },
+  data() {
+    return {
+      redacao: [],
+      redacaoUrl: "",
+      selected: null,
+      req: null,
+      perPage: 5,
+      defaultSortDirection: "asc",
+      sortIcon: "arrow-up",
+    };
+  },
+  methods: {
+    backToLista() {
+      barramento.voltarParaLista();
+      this.redacao = [];
+    },
+    openRedacao(url) {
+      this.redacaoUrl = url;
+    },
+    editRedacao(id) {
+      barramento.editarRedacao(id);
+    },
+  },
+  created() {
+    barramento.quandoExibirTabVisualizar((id) => {
+      let json = localStorage.getItem("userKey");
+      let userKey = JSON.parse(json);
+
+      this.req = {
+        headers: {
+          Authorization: `Bearer ${userKey.token}`,
+        },
+      };
+
+      axios
+        .get(`${urlAPI}redacao/${id}`, this.req)
+        .then((res) => {
+          this.redacao = res.data.data.urls;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+  },
 };
 </script>
 
 <style>
-#redacao .redacao-borda {
-  border: 1px solid black;
-}
 </style>

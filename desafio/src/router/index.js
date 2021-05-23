@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 import Login from '@/views/Login.vue'
-import Student from '@/views/Student.vue'
+import Aluno from '@/views/Aluno.vue'
 import Admin from '@/views/Admin.vue'
 
 Vue.use(VueRouter)
@@ -18,7 +18,7 @@ const routes = [
 
       if (userKey && userKey.token != undefined) {
         if (userKey.role == 'aluno') {
-          next('/student');
+          next('/aluno');
         } else {
           next('/admin');
         }
@@ -28,9 +28,9 @@ const routes = [
     }
   },
   {
-    path: '/student',
-    name: 'Student',
-    component: Student,
+    path: '/aluno',
+    name: 'Aluno',
+    component: Aluno,
     beforeEnter: (to, from, next) => {
       let json = localStorage.getItem('userKey')
       let userKey = JSON.parse(json)
@@ -58,7 +58,7 @@ const routes = [
         if (userKey.role == 'admin') {
           next();
         } else {
-          next('/student');
+          next('/aluno');
         }
       } else {
         next('/');

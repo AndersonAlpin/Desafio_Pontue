@@ -45,7 +45,7 @@ export default {
 
           this.role == "admin"
             ? this.$router.push({ name: "Admin" })
-            : this.$router.push({ name: "Student" });
+            : this.$router.push({ name: "Aluno" });
         })
         .catch((err) => {
           console.log(err.message);
