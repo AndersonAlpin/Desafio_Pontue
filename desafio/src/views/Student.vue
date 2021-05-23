@@ -7,62 +7,7 @@
       <b-tabs v-model="currentTab" id="tabs" type="is-toggle" expanded>
         <!-- LISTA DE REDAÇÕES -->
         <b-tab-item label="Lista" icon="book-open" :visible="visibleTab.lista">
-          <Table
-            :list="redacoes"
-            labelButton="Limpar seleção"
-            colorButton="is-danger"
-            iconButton="close"
-          >
-            <!-- COLUNAS -->
-            <b-table-column field="id" label="ID" centered v-slot="props">
-              {{ props.row.id }}
-            </b-table-column>
-            <b-table-column
-              field="numero"
-              label="Número"
-              centered
-              v-slot="props"
-            >
-              {{ props.row.numero }}
-            </b-table-column>
-            <b-table-column
-              field="created_at"
-              label="Data"
-              centered
-              sortable
-              v-slot="props"
-            >
-              {{ dateFormat(props.row.created_at) }}
-            </b-table-column>
-
-            <!-- BOTÕES -->
-            <b-table-column
-              class="buttons"
-              field="buttons"
-              label="Ações"
-              centered
-              v-slot="props"
-            >
-              <div id="buttons" class="buttons">
-                <!-- Mostrar lista de redações -->
-                <b-button
-                  class="button"
-                  type="is-success"
-                  icon-right="eye"
-                  name="showRedacoes"
-                  @click="[showTab(1), showRedacaoUrls(props.row.id)]"
-                />
-                <!-- Deletar redação -->
-                <b-button
-                  class="button"
-                  type="is-danger"
-                  icon-right="delete"
-                  name="delete"
-                  @click="deleteRedacao(props.row.id)"
-                />
-              </div>
-            </b-table-column>
-          </Table>
+          <Redacoes :list="redacoes" />
         </b-tab-item>
 
         <!-- Visualizar redações -->
@@ -71,67 +16,10 @@
           icon="eye"
           :visible="visibleTab.visualizar"
         >
-          <span class="has-text-warning-dark subtitle"
-            >A redação será exibida abaixo da tabela!</span
-          >
-          <Table
-            :list="redacao"
-            labelButton="Voltar"
-            colorButton="is-info"
-            iconButton="arrow-left"
-            activeButton="true"
-          >
-            <!-- COLUNAS -->
-            <b-table-column field="id" label="ID" centered v-slot="props">
-              {{ props.row.id }}
-            </b-table-column>
-
-            <b-table-column
-              field="anotacoes"
-              label="Anotações"
-              centered
-              v-slot="props"
-            >
-              {{ props.row.anotacoes || "Sem anotações" }}
-            </b-table-column>
-
-            <b-table-column
-              field="comentarios"
-              label="Comentários"
-              centered
-              v-slot="props"
-            >
-              {{ props.row.comentarios || "Sem comentários" }}
-            </b-table-column>
-
-            <!-- BOTÕES -->
-            <b-table-column
-              class="buttons"
-              field="buttons"
-              label="Ações"
-              centered
-              v-slot="props"
-            >
-              <div id="buttons" class="buttons">
-                <!-- Mostrar redação -->
-                <b-button
-                  class="button"
-                  type="is-success"
-                  icon-right="eye"
-                  name="showRedacao"
-                  @click="showRedacao(props.row.url)"
-                />
-                <!-- Editar redação -->
-                <b-button
-                  class="button"
-                  type="is-warning"
-                  icon-right="file-edit"
-                  name="edit"
-                />
-              </div>
-            </b-table-column>
-          </Table>
-          <Redacao :link="link" />
+          <span class="has-text-warning-dark subtitle">
+            A redação será exibida abaixo da tabela!
+          </span>
+          <Redacao :list="redacao" />
         </b-tab-item>
 
         <!-- Cadastro de Redações -->
@@ -184,20 +72,18 @@
 
 <script>
 import Navbar from "@/components/Navbar.vue";
-import Table from "@/components/Table.vue";
+import Redacoes from "@/components/Redacoes.vue";
 import Redacao from "@/components/Redacao.vue";
 
 import axios from "axios";
 import urlAPI from "@/api/url";
-import { dateFormat } from "@/global.js";
 import barramento from "@/barramento.js";
 
 export default {
-  components: { Navbar, Table, Redacao },
+  components: { Navbar,  Redacoes, Redacao },
   data() {
     return {
-      currentTab: 2,
-      dateFormat,
+      currentTab: 0,
       aluno_id: "",
       name: "Aluno",
       redacoes: [], //Lista de redações
@@ -229,23 +115,6 @@ export default {
       localStorage.removeItem("userKey");
       this.$router.push({ name: "Login" });
     },
-    showTab(value) {
-      //Responsável por exibir ou não uma TAB
-      this.visibleTab.visualizar = true;
-      this.visibleTab.lista = false;
-      this.currentTab = value;
-    },
-    showRedacaoUrls(id) {
-      //Listar as redações a partir do ID principal
-      axios
-        .get(`${urlAPI}redacao/${id}`, this.req)
-        .then((res) => {
-          this.redacao = res.data.data.urls;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
     deleteRedacao(id) {
       //Deletar uma redação
       axios
@@ -270,21 +139,21 @@ export default {
           console.log(err);
         });
     },
-    showRedacao(value) {
-      //Recebe a URL da redação para ser exibida
-      this.link = value;
-    },
     deleteDropFile(index) {
       this.file.splice(index, 1);
     },
   },
   created() {
-    barramento.$on("rowSelected", (result) => {
-      //Aviso de quando uma linha da tabela é selecionada
-      this.visibleTab.visualizar = result;
+    barramento.$on("showRedacao", (result) => {
+      result ? this.currentTab = 1 : this.currentTab = 0;
+      this.visibleTab.visualizar = true;
+      this.visibleTab.lista = false;
+    });
+
+    barramento.$on("backToLista", (result) => {
+      result ? this.currentTab = 0 : this.currentTab = 1;
+      this.visibleTab.visualizar = false;
       this.visibleTab.lista = true;
-      this.currentTab = 0;
-      this.link = null;
     });
 
     let json = localStorage.getItem("userKey");

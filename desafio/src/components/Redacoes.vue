@@ -3,11 +3,11 @@
     <b-field grouped group-multiline>
       <b-field>
         <b-button
-          label="Voltar"
-          type="is-info"
-          icon-left="arrow-left"
-          :disabled="false"
-          @click="backToLista"
+          label="Limpar seleção"
+          type="is-danger"
+          icon-left="close"
+          :disabled="!selected"
+          @click="selected = null"
         />
       </b-field>
 
@@ -20,7 +20,7 @@
     </b-field>
 
     <b-table
-      :data="redacao"
+      :data="list"
       paginated
       :per-page="perPage"
       pagination-position="bottom"
@@ -38,27 +38,22 @@
         {{ props.row.id }}
       </b-table-column>
 
-      <!-- Anotações -->
+      <!-- Número -->
+      <b-table-column field="numero" label="Número" centered v-slot="props">
+        {{ props.row.numero }}
+      </b-table-column>
+      <!-- Data -->
       <b-table-column
-        field="anotacoes"
-        label="Anotações"
+        field="created_at"
+        label="Data"
         centered
+        sortable
         v-slot="props"
       >
-        {{ props.row.anotacoes || "Sem anotações" }}
+        {{ dateFormat(props.row.created_at) }}
       </b-table-column>
 
-      <!-- Comentários -->
-      <b-table-column
-        field="comentarios"
-        label="Comentários"
-        centered
-        v-slot="props"
-      >
-        {{ props.row.comentarios || "Sem comentários" }}
-      </b-table-column>
-
-      <!-- Botões -->
+      <!-- BOTÕES -->
       <b-table-column
         class="buttons"
         field="buttons"
@@ -67,78 +62,48 @@
         v-slot="props"
       >
         <div id="buttons" class="buttons">
-          <!-- Mostrar redação -->
+          <!-- Mostrar URL das redações -->
           <b-button
             class="button"
             type="is-success"
             icon-right="eye"
             name="showRedacao"
-            @click="openRedacao(props.row.url)"
+            @click="showRedacao(props.row.id)"
           />
-          <!-- Editar redação -->
+          <!-- Deletar redação -->
           <b-button
             class="button"
-            type="is-warning"
-            icon-right="file-edit"
-            name="edit"
+            type="is-danger"
+            icon-right="delete"
+            name="delete"
+            @click="deleteRedacao(props.row.id)"
           />
         </div>
       </b-table-column>
     </b-table>
-    <ViewRedacao :link="redacaoUrl" />
   </div>
 </template>
 
 <script>
 import barramento from "@/barramento.js";
-import urlAPI from "@/api/url";
-import axios from "axios";
-
-import ViewRedacao from "@/components/ViewRedacao.vue"
+import { dateFormat } from "@/global.js";
 
 export default {
-  components: { ViewRedacao },
+  props: ["list"],
   data() {
+    let data = { ...this.list };
     return {
-      redacao: [],
-      redacaoUrl: "",
-      selected: null,
-      req: null,
+      dateFormat,
+      selected: data[1],
       perPage: 5,
       defaultSortDirection: "asc",
       sortIcon: "arrow-up",
     };
   },
   methods: {
-    backToLista(){
-      barramento.$emit("backToLista", true);
-      this.redacao = [];
+    showRedacao(id) {
+      barramento.$emit("showRedacao", id);
     },
-    openRedacao(url){
-      this.redacaoUrl = url;
-    }
-  },
-  created() {
-    barramento.$on("showRedacao", (result) => {
-      let id = result;
-      let json = localStorage.getItem("userKey");
-      let userKey = JSON.parse(json);
-
-      this.req = {
-        headers: {
-          Authorization: `Bearer ${userKey.token}`,
-        },
-      };
-
-      axios
-        .get(`${urlAPI}redacao/${id}`, this.req)
-        .then((res) => {
-          this.redacao = res.data.data.urls;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    });
   },
 };
 </script>
