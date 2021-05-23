@@ -1,37 +1,10 @@
 <template>
   <div id="redacoes">
-    <b-field grouped group-multiline>
-      <b-field>
-        <b-button
-          label="Limpar seleção"
-          type="is-danger"
-          icon-left="close"
-          :disabled="!selected"
-          @click="selected = null"
-        />
-      </b-field>
-
-      <b-select v-model="perPage">
-        <option value="5">5 por página</option>
-        <option value="10">10 por página</option>
-        <option value="15">15 por página</option>
-        <option value="20">20 por página</option>
-      </b-select>
-    </b-field>
-
-    <b-table
-      :data="list"
-      paginated
-      :per-page="perPage"
-      pagination-position="bottom"
-      :default-sort-direction="defaultSortDirection"
-      :sort-icon="sortIcon"
-      sort-icon-size="is-small"
-      default-sort="created_at"
-      aria-next-label="Próxima página"
-      aria-previous-label="Página anterior"
-      aria-page-label="Página"
-      :selected.sync="selected"
+    <Table
+      :list="list"
+      labelButton="Limpar Seleção"
+      colorButton="is-danger"
+      iconButton="close"
     >
       <!-- ID -->
       <b-table-column field="id" label="ID" centered v-slot="props">
@@ -80,17 +53,20 @@
           />
         </div>
       </b-table-column>
-    </b-table>
+    </Table>
   </div>
 </template>
 
 <script>
+import Table from "@/components/Table.vue";
+
 import { dateFormat } from "@/global.js";
 import barramento from "@/barramento.js";
 import urlAPI from "@/api/url";
 import axios from "axios";
 
 export default {
+  components: { Table },
   props: ["list"],
   data() {
     let data = { ...this.list };
@@ -119,7 +95,6 @@ export default {
       axios
         .delete(`${urlAPI}redacao/${id}/delete`, req)
         .then((res) => {
-          this.listRedacoes;
           console.log(res);
         })
         .catch((err) => {

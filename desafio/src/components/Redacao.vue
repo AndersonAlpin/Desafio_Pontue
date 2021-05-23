@@ -1,37 +1,11 @@
 <template>
-  <div id="redacoes">
-    <b-field grouped group-multiline>
-      <b-field>
-        <b-button
-          label="Voltar"
-          type="is-info"
-          icon-left="arrow-left"
-          :disabled="false"
-          @click="backToLista"
-        />
-      </b-field>
-
-      <b-select v-model="perPage">
-        <option value="5">5 por página</option>
-        <option value="10">10 por página</option>
-        <option value="15">15 por página</option>
-        <option value="20">20 por página</option>
-      </b-select>
-    </b-field>
-
-    <b-table
-      :data="redacao"
-      paginated
-      :per-page="perPage"
-      pagination-position="bottom"
-      :default-sort-direction="defaultSortDirection"
-      :sort-icon="sortIcon"
-      sort-icon-size="is-small"
-      default-sort="created_at"
-      aria-next-label="Próxima página"
-      aria-previous-label="Página anterior"
-      aria-page-label="Página"
-      :selected.sync="selected"
+  <div id="redacao">
+    <Table
+      :list="redacao"
+      labelButton="Voltar"
+      colorButton="is-info"
+      iconButton="arrow-left"
+      activeButton="true"
     >
       <!-- ID -->
       <b-table-column field="id" label="ID" centered v-slot="props">
@@ -85,20 +59,21 @@
           />
         </div>
       </b-table-column>
-    </b-table>
+    </Table>
     <ViewRedacao :link="redacaoUrl" />
   </div>
 </template>
 
 <script>
+import ViewRedacao from "@/components/ViewRedacao.vue";
+import Table from "@/components/Table.vue";
+
 import barramento from "@/barramento.js";
 import urlAPI from "@/api/url";
 import axios from "axios";
 
-import ViewRedacao from "@/components/ViewRedacao.vue";
-
 export default {
-  components: { ViewRedacao },
+  components: { ViewRedacao, Table },
   data() {
     return {
       redacao: [],
