@@ -28,5 +28,12 @@ export default new Vue({
     quandoEnviarRedacao(callback) {
       this.$on('enviarRedacao', callback)
     },
+
+    abriRedacao(url){
+      this.$emit("abriRedacao", url)
+    },
+    quandoAbrirRedacao(callback) {
+      this.$on('abriRedacao', callback)
+    }
   }
 })

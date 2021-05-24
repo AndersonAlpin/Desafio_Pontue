@@ -62,7 +62,7 @@
         </div>
       </b-table-column>
     </Table>
-    <ViewRedacao :link="redacaoUrl" />
+    <ViewRedacao />
   </div>
 </template>
 
@@ -79,7 +79,6 @@ export default {
   data() {
     return {
       redacao: [],
-      redacaoUrl: "",
       req: null,
       user: null,
     };
@@ -90,7 +89,7 @@ export default {
       this.redacao = [];
     },
     openRedacao(url) {
-      this.redacaoUrl = url;
+      barramento.abriRedacao(url)
     },
     editRedacao(id) {
       barramento.editarRedacao(id);

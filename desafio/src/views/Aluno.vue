@@ -110,20 +110,11 @@ export default {
       this.visibleTab.edicao = false;
     });
 
-    let json = localStorage.getItem("userKey");
-    let userKey = JSON.parse(json);
-
-    this.aluno_id = userKey.aluno_id;
-
-    this.req = {
-      headers: {
-        Authorization: `Bearer ${userKey.token}`,
-      },
-    };
+    let user = this.$store.state.login[0];
 
     // Listar ID principal das redações automaticamente após login
     axios
-      .get(`${urlAPI}index/aluno/${this.aluno_id}`, this.req)
+      .get(`${urlAPI}index/aluno/${user.aluno_id}`, user.req)
       .then((res) => {
         this.redacoes = res.data.data;
       })

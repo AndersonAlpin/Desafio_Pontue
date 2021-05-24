@@ -69,17 +69,10 @@ export default {
       this.visibleTab.lista = true;
     })
 
-    let json = localStorage.getItem("userKey");
-    let userKey = JSON.parse(json);
-
-    let req = {
-      headers: {
-        Authorization: `Bearer ${userKey.token}`,
-      },
-    };
+    let user = this.$store.state.login[0];
 
     axios
-      .get(`${urlAPI}index/admin`, req)
+      .get(`${urlAPI}index/admin`, user.req)
       .then((res) => {
         this.alunos = res.data.data;
       })
