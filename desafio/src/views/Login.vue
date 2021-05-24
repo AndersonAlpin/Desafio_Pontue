@@ -30,9 +30,9 @@
 </template>
 
 <script>
-import axios from "axios";
-import urlAPI from "@/api/url";
 import { setLocalStorage } from "@/global.js";
+import urlAPI from "@/api/url";
+import axios from "axios";
 
 import { ValidationProvider, extend } from "vee-validate";
 import { required } from "vee-validate/dist/rules";
