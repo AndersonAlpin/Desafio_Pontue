@@ -51,17 +51,10 @@ export default {
     uploadRedacao() {
       console.log(this.file);
 
-      let json = localStorage.getItem("userKey");
-      let userKey = JSON.parse(json);
-
-      let req = {
-        headers: {
-          Authorization: `Bearer ${userKey.token}`,
-        },
-      };
+      let user = this.$store.state.login[0];
 
       axios
-        .post(`${urlAPI}alunos/redacao/create`, this.file, req)
+        .post(`${urlAPI}alunos/redacao/create`, this.file, user.req)
         .then((res) => {
           console.log(res);
         })

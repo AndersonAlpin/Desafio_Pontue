@@ -79,7 +79,6 @@ export default {
   data() {
     return {
       redacao: [],
-      req: null,
       user: null,
     };
   },
@@ -96,23 +95,17 @@ export default {
     },
   },
   created() {
-    let json = localStorage.getItem("userKey");
-    let userKey = JSON.parse(json);
+    barramento.quandoVoltarParaLista(result => {
+      if(result) this.redacao = []
+    })
 
-    userKey.aluno_id ? (this.user = "Aluno") : (this.user = "Admin");
+    let user = this.$store.state.login[0];
+
+    user.aluno_id ? (this.user = "Aluno") : (this.user = "Admin");
 
     barramento.quandoExibirTabVisualizar((id) => {
-      let json = localStorage.getItem("userKey");
-      let userKey = JSON.parse(json);
-
-      this.req = {
-        headers: {
-          Authorization: `Bearer ${userKey.token}`,
-        },
-      };
-
       axios
-        .get(`${urlAPI}redacao/${id}`, this.req)
+        .get(`${urlAPI}redacao/${id}`, user.req)
         .then((res) => {
           this.redacao = res.data.data.urls;
         })

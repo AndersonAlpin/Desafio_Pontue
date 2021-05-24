@@ -16,7 +16,7 @@
           icon="eye"
           :visible="visibleTab.visualizar"
         >
-          <span class="has-text-warning-dark subtitle">
+          <span class="has-text-warning-dark">
             A redação será exibida abaixo da tabela!
           </span>
           <Redacao />
@@ -70,17 +70,6 @@ export default {
     };
   },
   methods: {
-    listRedacoes() {
-      //Listar ID principal das redações
-      axios
-        .get(`${urlAPI}index/aluno/${this.aluno_id}`, this.req)
-        .then((res) => {
-          this.redacoes = res.data.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
     logout() {
       localStorage.removeItem("userKey");
       this.$router.push({ name: "Login" });
@@ -108,6 +97,20 @@ export default {
     barramento.quandoEnviarRedacao((result) => {
       if (result) this.currentTab = 1;
       this.visibleTab.edicao = false;
+    });
+
+    barramento.quandoDeletarRedacao((result) => {
+      let userState = this.$store.state.login[0];
+      
+      if(result)
+      axios
+        .get(`${urlAPI}index/aluno/${userState.aluno_id}`, userState.req)
+        .then((res) => {
+          this.redacoes = res.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     });
 
     let user = this.$store.state.login[0];

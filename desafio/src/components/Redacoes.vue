@@ -97,21 +97,16 @@ export default {
       this.isModalActive = true;
     },
     deleteRedacao() {
+      
       this.isModalActive = false;
 
-      let json = localStorage.getItem("userKey");
-      let userKey = JSON.parse(json);
-
-      let req = {
-        headers: {
-          Authorization: `Bearer ${userKey.token}`,
-        },
-      };
+      let user = this.$store.state.login[0];
 
       axios
-        .delete(`${urlAPI}redacao/${this.redacao_id}/delete`, req)
+        .delete(`${urlAPI}redacao/${this.redacao_id}/delete`, user.req)
         .then((res) => {
           console.log(res);
+          barramento.deletarRedacao()
         })
         .catch((err) => {
           console.log(err);

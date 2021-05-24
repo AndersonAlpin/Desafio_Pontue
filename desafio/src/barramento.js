@@ -22,6 +22,13 @@ export default new Vue({
       this.$on('editarRedacao', callback)
     },
 
+    deletarRedacao(){
+      this.$emit("deletarRedacao", true)
+    },
+    quandoDeletarRedacao(callback){
+      this.$on("deletarRedacao", callback)
+    },
+
     enviarRedacao(){
       this.$emit("enviarRedacao", true);
     },

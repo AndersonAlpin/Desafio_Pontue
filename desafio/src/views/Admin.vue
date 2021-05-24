@@ -16,7 +16,7 @@
           icon="eye"
           :visible="visibleTab.visualizar"
         >
-          <span class="has-text-warning-dark subtitle">
+          <span class="has-text-warning-dark">
             A redação será exibida abaixo da tabela!
           </span>
           <Redacao />

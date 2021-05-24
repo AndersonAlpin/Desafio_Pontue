@@ -54,14 +54,7 @@ export default {
       console.log(this.file);
       console.log(this.id);
 
-      let json = localStorage.getItem("userKey");
-      let userKey = JSON.parse(json);
-
-      let req = {
-        headers: {
-          Authorization: `Bearer ${userKey.token}`,
-        },
-      };
+      let user = this.$store.state.login[0];
 
       axios
         .post(
@@ -70,7 +63,7 @@ export default {
             file: this.file,
             urls: this.id,
           },
-          req
+          user.req
         )
         .then((res) => {
           console.log(res);
