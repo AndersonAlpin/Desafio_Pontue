@@ -1,5 +1,4 @@
-const setLocalStorage = (token, role, aluno_id) => {
-  let userKey = { token, role, aluno_id };
+const setLocalStorage = (userKey) => {
   localStorage.setItem("userKey", JSON.stringify(userKey));
 }
 

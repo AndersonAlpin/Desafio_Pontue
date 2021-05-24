@@ -48,9 +48,7 @@ export default {
     return {
       emailField: "juliana.cerqueira@pontue.com.br",
       passwordField: "123456@pontue",
-      role: "",
-      token: "",
-      aluno_id: "",
+      user: {},
       msg: "",
     };
   },
@@ -62,17 +60,29 @@ export default {
           password: this.passwordField,
         })
         .then((res) => {
-          this.role = res.data.aluno_id ? "aluno" : "admin";
-          this.token = res.data.access_token;
-          this.aluno_id = res.data.aluno_id;
+          this.user = {
+            role: res.data.aluno_id ? "aluno" : "admin",
+            token: res.data.access_token,
+            aluno_id: res.data.aluno_id,
+          };
 
-          setLocalStorage(this.token, this.role, this.aluno_id);
+          setLocalStorage(this.user);
+
+          let req = {
+            headers: {
+              Authorization: `Bearer ${this.user.token}`,
+            },
+          };
+
+          this.user.req = req
 
           this.role == "admin"
             ? this.$router.push({ name: "Admin" })
             : this.$router.push({ name: "Aluno" });
         })
         .catch((err) => {
+          this.msg = "Login inválido";
+
           setTimeout(() => {
             this.msg = null;
           }, 3000);
