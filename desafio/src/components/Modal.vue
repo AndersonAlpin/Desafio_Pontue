@@ -12,10 +12,10 @@
     <template>
       <div class="modal-card" style="width: auto">
         <header class="modal-card-head">
-          <p class="modal-card-title">Deletar Redação</p>
+          <p class="modal-card-title">Redação</p>
         </header>
         <section class="modal-card-body">
-          <p>Tem certeza que deseja excluir esta redação?</p>
+          <p class="has-text-danger-dark" >Tem certeza que deseja excluir esta redação?</p>
         </section>
         <footer id="buttons" class="modal-card-foot">
           <slot/>

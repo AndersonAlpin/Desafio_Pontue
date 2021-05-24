@@ -1,5 +1,9 @@
 <template>
   <div id="redacoes">
+    <Modal :isModalActive="isModalActive">
+      <b-button @click="isModalActive = false" type="is-primary" label="Fechar"></b-button>
+      <b-button @click="deleteRedacao" type="is-warning" label="Excluir"></b-button>
+    </Modal>
     <Table
       :list="list"
       labelButton="Limpar Seleção"
@@ -14,7 +18,13 @@
       </b-table-column>
 
       <!-- Número -->
-      <b-table-column field="numero" label="Número" sortable centered v-slot="props">
+      <b-table-column
+        field="numero"
+        label="Número"
+        sortable
+        centered
+        v-slot="props"
+      >
         {{ props.row.numero }}
       </b-table-column>
       <!-- Data -->
@@ -51,7 +61,7 @@
             type="is-danger"
             icon-right="delete"
             name="delete"
-            @click="deleteRedacao(props.row.id)"
+            @click="confirmDelecao(props.row.id)"
           />
         </div>
       </b-table-column>
@@ -61,6 +71,7 @@
 
 <script>
 import Table from "@/components/Table.vue";
+import Modal from "@/components/Modal.vue";
 
 import { dateFormat } from "@/global.js";
 import barramento from "@/barramento.js";
@@ -68,18 +79,26 @@ import urlAPI from "@/api/url";
 import axios from "axios";
 
 export default {
-  components: { Table },
+  components: { Table, Modal },
   props: ["list"],
   data() {
     return {
       dateFormat,
+      isModalActive: false,
+      redacao_id: null,
     };
   },
   methods: {
     showRedacao(id) {
       barramento.exibirTabVisualizar(id);
     },
-    deleteRedacao(id) {
+    confirmDelecao(id) {
+      this.redacao_id = id;
+      this.isModalActive = true;
+    },
+    deleteRedacao() {
+      this.isModalActive = false;
+
       let json = localStorage.getItem("userKey");
       let userKey = JSON.parse(json);
 
@@ -90,7 +109,7 @@ export default {
       };
 
       axios
-        .delete(`${urlAPI}redacao/${id}/delete`, req)
+        .delete(`${urlAPI}redacao/${this.redacao_id}/delete`, req)
         .then((res) => {
           console.log(res);
         })
