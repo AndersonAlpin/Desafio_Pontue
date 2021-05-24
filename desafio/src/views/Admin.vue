@@ -19,7 +19,7 @@
           <span class="has-text-warning-dark subtitle">
             A redação será exibida abaixo da tabela!
           </span>
-          
+          <Redacao />
         </b-tab-item>
       </b-tabs>
     </template>
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import Redacao from "@/components/Redacao.vue";
 import Navbar from "@/components/Navbar.vue";
 import Alunos from "@/components/Alunos.vue";
 
@@ -35,7 +36,7 @@ import urlAPI from "@/api/url";
 import axios from "axios";
 
 export default {
-  components: { Navbar, Alunos },
+  components: { Navbar, Alunos, Redacao },
   data() {
     return {
       name: "Administrador",
@@ -74,7 +75,6 @@ export default {
       .get(`${urlAPI}index/admin`, req)
       .then((res) => {
         this.alunos = res.data.data;
-        console.log(res.data.data);
       })
       .catch((err) => {
         console.log(err);

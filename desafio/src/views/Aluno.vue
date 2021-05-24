@@ -19,7 +19,7 @@
           <span class="has-text-warning-dark subtitle">
             A redação será exibida abaixo da tabela!
           </span>
-          <Redacao :list="redacao" />
+          <Redacao />
         </b-tab-item>
 
         <!-- TAB 2 - Edição de redações -->
@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import Redacoes from "@/components/Redacoes.vue";
 import Cadastro from "@/components/Cadastro.vue";
+import Redacoes from "@/components/Redacoes.vue";
 import Redacao from "@/components/Redacao.vue";
 import Navbar from "@/components/Navbar.vue";
 import Edicao from "@/components/Edicao.vue";
@@ -59,7 +59,6 @@ export default {
       aluno_id: "",
       name: "Aluno",
       redacoes: [], //Lista de redações
-      redacao: [], //Dados de uma redação
       req: [], //Recebe o cabeçalho com o token de autenticação
       link: null, //Link de uma redação selecionada
       visibleTab: {
