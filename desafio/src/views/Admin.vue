@@ -29,8 +29,10 @@
 <script>
 import Navbar from "@/components/Navbar.vue";
 import Alunos from "@/components/Alunos.vue";
+
+import barramento from "@/barramento.js";
+import urlAPI from "@/api/url";
 import axios from "axios";
-import BASE_URL from "@/api/url";
 
 export default {
   components: { Navbar, Alunos },
@@ -52,6 +54,13 @@ export default {
     },
   },
   created() {
+    barramento.quandoExibirTabVisualizar((id) => {
+      if(id) 
+      this.currentTab = 1;
+      this.visibleTab.visualizar = true;
+      this.visibleTab.lista = false;
+    });
+
     let json = localStorage.getItem("userKey");
     let userKey = JSON.parse(json);
 
@@ -62,7 +71,7 @@ export default {
     };
 
     axios
-      .get(`${BASE_URL}index/admin`, req)
+      .get(`${urlAPI}index/admin`, req)
       .then((res) => {
         this.alunos = res.data.data;
         console.log(res.data.data);

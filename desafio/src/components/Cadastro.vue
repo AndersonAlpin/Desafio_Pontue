@@ -24,6 +24,10 @@
       </span>
     </div>
 
+    <div class="message-login">
+      <span v-if="msg">{{ msg }}</span>
+    </div>
+
     <div id="button-upload">
       <b-button @click="uploadRedacao" type="is-dark" icon-right="file-export"
         >Enviar</b-button
@@ -40,6 +44,7 @@ export default {
   data() {
     return {
       file: [],
+      msg: null,
     };
   },
   methods: {
@@ -61,6 +66,10 @@ export default {
           console.log(res);
         })
         .catch((err) => {
+          this.msg = "Ocorreu um erro durante o envio do arquivo.";
+          setTimeout(() => {
+            this.msg = null;
+          }, 5000);
           console.log(err);
         });
     },
@@ -74,5 +83,12 @@ export default {
 <style>
 #tab-cadastro {
   margin-top: 20px;
+}
+
+.message-login {
+  font-size: 16px;
+  color: rgb(230, 88, 88);
+  text-align: center;
+  margin-bottom: 10px;
 }
 </style>

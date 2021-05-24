@@ -89,27 +89,27 @@ export default {
   },
   created() {
     barramento.quandoExibirTabVisualizar((id) => {
-      id ? (this.currentTab = 1) : (this.currentTab = 0);
+      if (id) this.currentTab = 1;
       this.visibleTab.visualizar = true;
       this.visibleTab.lista = false;
     });
 
     barramento.quandoVoltarParaLista((result) => {
-      result ? (this.currentTab = 0) : (this.currentTab = 1);
+      if (result) this.currentTab = 0;
       this.visibleTab.visualizar = false;
       this.visibleTab.edicao = false;
       this.visibleTab.lista = true;
     });
 
-    barramento.quandoEditarRedacao(result => {
-      result ? (this.currentTab = 2) : (this.currentTab = 1);
+    barramento.quandoEditarRedacao((result) => {
+      if (result) this.currentTab = 2;
       this.visibleTab.edicao = true;
-    })
+    });
 
-    barramento.quandoEnviarRedacao(result => {
-      result ? (this.currentTab = 1) : (this.currentTab = 1);
+    barramento.quandoEnviarRedacao((result) => {
+      if (result) this.currentTab = 1;
       this.visibleTab.edicao = false;
-    })
+    });
 
     let json = localStorage.getItem("userKey");
     let userKey = JSON.parse(json);

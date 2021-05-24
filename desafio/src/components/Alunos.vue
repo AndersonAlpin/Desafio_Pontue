@@ -9,22 +9,46 @@
       sortDirection="asc"
     >
       <!-- Nome do aluno -->
-      <b-table-column field="aluno.nome_completo" label="Aluno" centered sortable v-slot="props">
+      <b-table-column
+        field="aluno.nome_completo"
+        label="Aluno"
+        centered
+        sortable
+        v-slot="props"
+      >
         {{ props.row.aluno.nome_completo }}
       </b-table-column>
 
       <!-- Nome da escola -->
-      <b-table-column field="escola.nome" label="Escola" centered sortable v-slot="props">
+      <b-table-column
+        field="escola.nome"
+        label="Escola"
+        centered
+        sortable
+        v-slot="props"
+      >
         {{ props.row.escola.nome }}
       </b-table-column>
 
       <!-- Nome da turma -->
-      <b-table-column field="aluno.turma.nome" label="Turma" centered sortable v-slot="props">
+      <b-table-column
+        field="aluno.turma.nome"
+        label="Turma"
+        centered
+        sortable
+        v-slot="props"
+      >
         {{ props.row.aluno.turma.nome }}
       </b-table-column>
 
       <!-- Data -->
-      <b-table-column field="created_at" label="Data" centered sortable v-slot="props">
+      <b-table-column
+        field="created_at"
+        label="Data"
+        centered
+        sortable
+        v-slot="props"
+      >
         {{ dateFormat(props.row.created_at) }}
       </b-table-column>
 
@@ -53,6 +77,8 @@
 
 <script>
 import Table from "@/components/Table.vue";
+
+import barramento from "@/barramento.js";
 import { dateFormat } from "@/global.js";
 
 export default {
@@ -62,6 +88,11 @@ export default {
     return {
       dateFormat,
     };
+  },
+  methods: {
+    showRedacao(id) {
+      barramento.exibirTabVisualizar(id);
+    },
   },
 };
 </script>

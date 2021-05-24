@@ -21,7 +21,7 @@
       </b-field>
 
       <div class="message-login">
-        <span  v-if="msg" >{{ msg }}</span>
+        <span v-if="msg">{{ msg }}</span>
       </div>
 
       <b-button class="button" @click="login" expanded>Entrar</b-button>
@@ -73,10 +73,10 @@ export default {
             : this.$router.push({ name: "Aluno" });
         })
         .catch((err) => {
-          err ? (this.msg = " ") : null;
           setTimeout(() => {
             this.msg = null;
-          }, 3000)
+          }, 3000);
+          console.log(err);
         });
     },
   },
