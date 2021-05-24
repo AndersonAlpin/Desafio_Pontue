@@ -24,10 +24,10 @@
       paginated
       :per-page="perPage"
       pagination-position="bottom"
-      :default-sort-direction="defaultSortDirection"
-      :sort-icon="sortIcon"
+      :default-sort-direction="sortDirection"
+      sort-icon="arrow-up"
       sort-icon-size="is-small"
-      default-sort="created_at"
+      :default-sort="sort"
       aria-next-label="Próxima página"
       aria-previous-label="Página anterior"
       aria-page-label="Página"
@@ -42,14 +42,21 @@
 import barramento from "@/barramento.js";
 
 export default {
-  props: ["list", "labelButton", "colorButton", "iconButton", "activeButton", "action"],
+  props: [
+    "list",
+    "labelButton",
+    "colorButton",
+    "iconButton",
+    "activeButton",
+    "action",
+    "sort",
+    "sortDirection",
+  ],
   data() {
     let data = { ...this.list };
     return {
       selected: data[1],
       perPage: 5,
-      defaultSortDirection: "asc",
-      sortIcon: "arrow-up",
     };
   },
   methods: {

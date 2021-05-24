@@ -73,7 +73,10 @@ export default {
             : this.$router.push({ name: "Aluno" });
         })
         .catch((err) => {
-          err ? (this.msg = "Login incorreto") : null;
+          err ? (this.msg = " ") : null;
+          setTimeout(() => {
+            this.msg = null;
+          }, 3000)
         });
     },
   },

@@ -1,7 +1,7 @@
 <template>
   <div id="student">
     <Navbar :name="name" :logout="logout" />
-    <h1 class="title page-title">Minhas Redações</h1>
+    <h1 class="title page-title">Área do Aluno</h1>
 
     <template>
       <b-tabs v-model="currentTab" id="tabs" type="is-toggle" expanded>

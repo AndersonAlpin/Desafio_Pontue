@@ -78,11 +78,7 @@ export default {
     return {
       redacao: [],
       redacaoUrl: "",
-      selected: null,
       req: null,
-      perPage: 5,
-      defaultSortDirection: "asc",
-      sortIcon: "arrow-up",
     };
   },
   methods: {

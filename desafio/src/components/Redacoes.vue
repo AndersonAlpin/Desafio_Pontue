@@ -5,6 +5,8 @@
       labelButton="Limpar Seleção"
       colorButton="is-danger"
       iconButton="close"
+      sort="created_at"
+      sortDirection="desc"
     >
       <!-- ID -->
       <b-table-column field="id" label="ID" centered v-slot="props">
@@ -12,7 +14,7 @@
       </b-table-column>
 
       <!-- Número -->
-      <b-table-column field="numero" label="Número" centered v-slot="props">
+      <b-table-column field="numero" label="Número" sortable centered v-slot="props">
         {{ props.row.numero }}
       </b-table-column>
       <!-- Data -->
@@ -69,13 +71,8 @@ export default {
   components: { Table },
   props: ["list"],
   data() {
-    let data = { ...this.list };
     return {
-      defaultSortDirection: "asc",
-      sortIcon: "arrow-up",
-      selected: data[1],
       dateFormat,
-      perPage: 5,
     };
   },
   methods: {
