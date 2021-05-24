@@ -50,13 +50,15 @@
             @click="openRedacao(props.row.url)"
           />
           <!-- Editar redação -->
-          <b-button
-            class="button"
-            type="is-warning"
-            icon-right="file-edit"
-            name="edit"
-            @click="editRedacao(props.row.id)"
-          />
+          <template v-if="user == 'Aluno'">
+            <b-button
+              class="button"
+              type="is-warning"
+              icon-right="file-edit"
+              name="edit"
+              @click="editRedacao(props.row.id)"
+            />
+          </template>
         </div>
       </b-table-column>
     </Table>
@@ -79,6 +81,7 @@ export default {
       redacao: [],
       redacaoUrl: "",
       req: null,
+      user: null,
     };
   },
   methods: {
@@ -94,6 +97,11 @@ export default {
     },
   },
   created() {
+    let json = localStorage.getItem("userKey");
+    let userKey = JSON.parse(json);
+
+    userKey.aluno_id ? (this.user = "Aluno") : (this.user = "Admin");
+
     barramento.quandoExibirTabVisualizar((id) => {
       let json = localStorage.getItem("userKey");
       let userKey = JSON.parse(json);

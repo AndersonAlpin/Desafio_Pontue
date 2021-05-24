@@ -17,9 +17,8 @@
         <section class="modal-card-body">
           <p>Tem certeza que deseja excluir esta redação?</p>
         </section>
-        <footer class="modal-card-foot">
-          <b-button type="is-success" label="Fechar"></b-button>
-          <b-button type="is-warning" label="Fechar"></b-button>
+        <footer id="buttons" class="modal-card-foot">
+          <slot/>
         </footer>
       </div>
     </template>
