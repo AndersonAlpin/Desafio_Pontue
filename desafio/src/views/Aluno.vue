@@ -16,7 +16,7 @@
           icon="eye"
           :visible="visibleTab.visualizar"
         >
-          <span class="has-text-warning-dark subtitle">
+          <span class="has-text-warning-dark">
             A redação será exibida abaixo da tabela!
           </span>
           <Redacao />
@@ -70,17 +70,6 @@ export default {
     };
   },
   methods: {
-    listRedacoes() {
-      //Listar ID principal das redações
-      axios
-        .get(`${urlAPI}index/aluno/${this.aluno_id}`, this.req)
-        .then((res) => {
-          this.redacoes = res.data.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
     logout() {
       localStorage.removeItem("userKey");
       this.$router.push({ name: "Login" });
@@ -110,20 +99,25 @@ export default {
       this.visibleTab.edicao = false;
     });
 
-    let json = localStorage.getItem("userKey");
-    let userKey = JSON.parse(json);
+    barramento.quandoDeletarRedacao((result) => {
+      let userState = this.$store.state.login[0];
+      
+      if(result)
+      axios
+        .get(`${urlAPI}index/aluno/${userState.aluno_id}`, userState.req)
+        .then((res) => {
+          this.redacoes = res.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
 
-    this.aluno_id = userKey.aluno_id;
-
-    this.req = {
-      headers: {
-        Authorization: `Bearer ${userKey.token}`,
-      },
-    };
+    let user = this.$store.state.login[0];
 
     // Listar ID principal das redações automaticamente após login
     axios
-      .get(`${urlAPI}index/aluno/${this.aluno_id}`, this.req)
+      .get(`${urlAPI}index/aluno/${user.aluno_id}`, user.req)
       .then((res) => {
         this.redacoes = res.data.data;
       })

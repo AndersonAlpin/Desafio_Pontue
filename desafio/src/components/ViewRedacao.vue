@@ -1,16 +1,30 @@
 <template>
-  <div id="view-redacao" v-if="link">
+  <div id="view-redacao">
     <hr />
-    <h1 class="subtitle">Redação</h1>
     <div class="-view-redacao-borda">
-      <b-image :src="link"></b-image>
+      <b-image :src="url"></b-image>
     </div>
   </div>
 </template>
 
 <script>
+import barramento from "@/barramento.js";
+
 export default {
-  props: ["link"],
+  data() {
+    return {
+      url: null,
+    };
+  },
+  created() {
+    barramento.quandoAbrirRedacao((url) => {
+      this.url = url;
+    });
+
+    barramento.quandoVoltarParaLista((result) => {
+      if (result) this.url = null;
+    });
+  },
 };
 </script>
 

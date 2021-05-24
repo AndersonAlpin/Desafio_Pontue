@@ -74,9 +74,11 @@ export default {
             },
           };
 
-          this.user.req = req
+          this.user.req = req;
 
-          this.role == "admin"
+          this.$store.state.login.push(this.user);
+
+          this.user.role == "admin"
             ? this.$router.push({ name: "Admin" })
             : this.$router.push({ name: "Aluno" });
         })
@@ -90,6 +92,12 @@ export default {
         });
     },
   },
+  created() {
+    this.$store.replaceState({
+      login: [],
+      redacoes: [],
+    })
+  }
 };
 </script>
 

@@ -62,7 +62,7 @@
         </div>
       </b-table-column>
     </Table>
-    <ViewRedacao :link="redacaoUrl" />
+    <ViewRedacao />
   </div>
 </template>
 
@@ -79,8 +79,6 @@ export default {
   data() {
     return {
       redacao: [],
-      redacaoUrl: "",
-      req: null,
       user: null,
     };
   },
@@ -90,30 +88,24 @@ export default {
       this.redacao = [];
     },
     openRedacao(url) {
-      this.redacaoUrl = url;
+      barramento.abriRedacao(url)
     },
     editRedacao(id) {
       barramento.editarRedacao(id);
     },
   },
   created() {
-    let json = localStorage.getItem("userKey");
-    let userKey = JSON.parse(json);
+    barramento.quandoVoltarParaLista(result => {
+      if(result) this.redacao = []
+    })
 
-    userKey.aluno_id ? (this.user = "Aluno") : (this.user = "Admin");
+    let user = this.$store.state.login[0];
+
+    user.aluno_id ? (this.user = "Aluno") : (this.user = "Admin");
 
     barramento.quandoExibirTabVisualizar((id) => {
-      let json = localStorage.getItem("userKey");
-      let userKey = JSON.parse(json);
-
-      this.req = {
-        headers: {
-          Authorization: `Bearer ${userKey.token}`,
-        },
-      };
-
       axios
-        .get(`${urlAPI}redacao/${id}`, this.req)
+        .get(`${urlAPI}redacao/${id}`, user.req)
         .then((res) => {
           this.redacao = res.data.data.urls;
         })
