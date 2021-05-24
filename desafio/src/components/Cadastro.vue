@@ -1,7 +1,7 @@
 <template>
   <div id="tab-cadastro">
     <b-field>
-      <b-upload v-model="file" multiple drag-drop expanded>
+      <b-upload v-model="files" multiple drag-drop expanded>
         <section class="section">
           <div class="content has-text-centered">
             <p>
@@ -14,7 +14,7 @@
     </b-field>
 
     <div class="tags">
-      <span v-for="(file, index) in file" :key="index" class="tag is-dark">
+      <span v-for="(file, index) in files" :key="index" class="tag is-dark">
         {{ file.name }}
         <button
           class="delete is-small"
@@ -43,31 +43,40 @@ import axios from "axios";
 export default {
   data() {
     return {
-      file: [],
+      files: [],
       msg: null,
     };
   },
   methods: {
     uploadRedacao() {
-      console.log(this.file);
+      if (this.files.length > 0) {
+        const formData = new FormData();
+        this.files.forEach((file) => formData.append("file", file, file.name));
+        console.log(formData);
+        let user = this.$store.state.login[0];
 
-      let user = this.$store.state.login[0];
-
-      axios
-        .post(`${urlAPI}alunos/redacao/create`, this.file, user.req)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          this.msg = "Ocorreu um erro durante o envio do arquivo.";
-          setTimeout(() => {
-            this.msg = null;
-          }, 5000);
-          console.log(err);
-        });
+        axios
+          .post(
+            `${urlAPI}alunos/redacao/create`,
+            {
+              file: formData,
+            },
+            user.req
+          )
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            this.msg = "Ocorreu um erro durante o envio do arquivo.";
+            setTimeout(() => {
+              this.msg = null;
+            }, 5000);
+            console.log(err);
+          });
+      }
     },
     deleteDropFile(index) {
-      this.file.splice(index, 1);
+      this.files.splice(index, 1);
     },
   },
 };

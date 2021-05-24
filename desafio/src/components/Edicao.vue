@@ -38,8 +38,6 @@
 
 <script>
 import barramento from "@/barramento.js";
-import urlAPI from "@/api/url";
-import axios from "axios";
 
 export default {
   data() {
@@ -51,31 +49,10 @@ export default {
   },
   methods: {
     uploadRedacao() {
-      console.log(this.file);
-      console.log(this.id);
-
-      let user = this.$store.state.login[0];
-
-      axios
-        .post(
-          `${urlAPI}alunos/redacao/create`,
-          {
-            file: this.file,
-            urls: this.id,
-          },
-          user.req
-        )
-        .then((res) => {
-          console.log(res);
-          barramento.enviarRedacao();
-        })
-        .catch((err) => {
-          this.msg = "Ocorreu um erro durante o envio do arquivo.";
-          setTimeout(() => {
-            this.msg = null;
-          }, 5000);
-          console.log(err);
-        });
+      if (this.file.length > 0) {
+        console.log(this.file);
+        console.log(this.id);
+      }
     },
     deleteDropFile(index) {
       this.file.splice(index, 1);

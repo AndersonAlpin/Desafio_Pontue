@@ -46,8 +46,8 @@ export default {
   components: { ValidationProvider },
   data() {
     return {
-      emailField: "juliana.cerqueira@pontue.com.br",
-      passwordField: "123456@pontue",
+      emailField: "",
+      passwordField: "",
       user: {},
       msg: "",
     };
