@@ -77,7 +77,6 @@
 
 <script>
 import Table from "@/components/Table.vue";
-
 import barramento from "@/barramento.js";
 import { dateFormat } from "@/global.js";
 

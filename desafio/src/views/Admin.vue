@@ -62,6 +62,13 @@ export default {
       this.visibleTab.lista = false;
     });
 
+    barramento.quandoVoltarParaLista((result) => {
+      if(result)
+      this.currentTab = 0;
+      this.visibleTab.visualizar = false;
+      this.visibleTab.lista = true;
+    })
+
     let json = localStorage.getItem("userKey");
     let userKey = JSON.parse(json);
 
