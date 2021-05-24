@@ -1,9 +1,8 @@
 <template>
   <div id="student">
     <Navbar :name="name" :logout="logout" />
-    <h1 class="title page-title">Área do Aluno</h1>
 
-    <template>
+    <template id="tabs" >
       <b-tabs v-model="currentTab" id="tabs" type="is-toggle" expanded>
         <!-- TAB 0 - Lista de redações-->
         <b-tab-item label="Lista" icon="book-open" :visible="visibleTab.lista">
@@ -140,5 +139,9 @@ export default {
 #buttons {
   display: flex;
   justify-content: center;
+}
+
+#tabs{
+  margin-top: 30px;
 }
 </style>

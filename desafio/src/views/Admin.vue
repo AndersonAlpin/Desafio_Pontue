@@ -1,9 +1,8 @@
 <template>
-  <div id="student">
+  <div id="admin">
     <Navbar :name="name" :logout="logout" />
-    <h1 class="title page-title">Área do Administrador</h1>
 
-    <template>
+    <template id="tabs">
       <b-tabs v-model="currentTab" id="tabs" type="is-toggle" expanded>
         <!-- TAB 0 - Lista de alunos-->
         <b-tab-item label="Lista" icon="school" :visible="visibleTab.lista">
@@ -44,7 +43,7 @@ export default {
       alunos: [],
       visibleTab: {
         lista: true,
-        visualizar: true,
+        visualizar: false,
       },
     };
   },
@@ -84,4 +83,7 @@ export default {
 </script>
 
 <style>
+#tabs{
+  margin-top: 30px;
+}
 </style>

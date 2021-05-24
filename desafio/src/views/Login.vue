@@ -3,7 +3,7 @@
     <div class="box">
       <b-field label="E-mail">
         <ValidationProvider name="email" rules="required" v-slot="{ errors }">
-          <b-input type="email" name="email" v-model="emailField" />
+          <b-input placeholder="Informe seu e-mail" type="email" name="email" v-model="emailField" />
           <span class="message">{{ errors[0] }}</span>
         </ValidationProvider>
       </b-field>
@@ -11,6 +11,7 @@
       <b-field label="Senha">
         <ValidationProvider name="email" rules="required" v-slot="{ errors }">
           <b-input
+            placeholder="Informe sua senha"
             type="password"
             name="password"
             v-model="passwordField"
@@ -54,50 +55,52 @@ export default {
   },
   methods: {
     login() {
-      axios
-        .post(`${urlAPI}auth/login`, {
-          email: this.emailField,
-          password: this.passwordField,
-        })
-        .then((res) => {
-          this.user = {
-            role: res.data.aluno_id ? "aluno" : "admin",
-            token: res.data.access_token,
-            aluno_id: res.data.aluno_id,
-          };
+      if (this.emailField && this.passwordField) {
+        axios
+          .post(`${urlAPI}auth/login`, {
+            email: this.emailField,
+            password: this.passwordField,
+          })
+          .then((res) => {
+            this.user = {
+              role: res.data.aluno_id ? "aluno" : "admin",
+              token: res.data.access_token,
+              aluno_id: res.data.aluno_id,
+            };
 
-          setLocalStorage(this.user);
+            setLocalStorage(this.user);
 
-          let req = {
-            headers: {
-              Authorization: `Bearer ${this.user.token}`,
-            },
-          };
+            let req = {
+              headers: {
+                Authorization: `Bearer ${this.user.token}`,
+              },
+            };
 
-          this.user.req = req;
+            this.user.req = req;
 
-          this.$store.state.login.push(this.user);
+            this.$store.state.login.push(this.user);
 
-          this.user.role == "admin"
-            ? this.$router.push({ name: "Admin" })
-            : this.$router.push({ name: "Aluno" });
-        })
-        .catch((err) => {
-          this.msg = "Login inválido";
+            this.user.role == "admin"
+              ? this.$router.push({ name: "Admin" })
+              : this.$router.push({ name: "Aluno" });
+          })
+          .catch((err) => {
+            this.msg = "Login inválido";
 
-          setTimeout(() => {
-            this.msg = null;
-          }, 3000);
-          console.log(err);
-        });
+            setTimeout(() => {
+              this.msg = null;
+            }, 3000);
+            console.log(err);
+          });
+      }
     },
   },
   created() {
     this.$store.replaceState({
       login: [],
       redacoes: [],
-    })
-  }
+    });
+  },
 };
 </script>
 
