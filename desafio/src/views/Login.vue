@@ -93,7 +93,10 @@ export default {
     },
   },
   created() {
-    this.$store.replaceState({login: []})
+    this.$store.replaceState({
+      login: [],
+      redacoes: [],
+    })
   }
 };
 </script>
