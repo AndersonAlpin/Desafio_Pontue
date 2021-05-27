@@ -1,8 +1,16 @@
 <template>
   <div id="redacoes">
     <Modal :isModalActive="isModalActive">
-      <b-button @click="isModalActive = false" type="is-primary" label="Fechar"></b-button>
-      <b-button @click="deleteRedacao" type="is-warning" label="Excluir"></b-button>
+      <b-button
+        @click="isModalActive = false"
+        type="is-primary"
+        label="Fechar"
+      ></b-button>
+      <b-button
+        @click="deleteRedacao"
+        type="is-warning"
+        label="Excluir"
+      ></b-button>
     </Modal>
     <Table
       :list="list"
@@ -86,6 +94,7 @@ export default {
       dateFormat,
       isModalActive: false,
       redacao_id: null,
+      userKey: null,
     };
   },
   methods: {
@@ -97,21 +106,21 @@ export default {
       this.isModalActive = true;
     },
     deleteRedacao() {
-      
       this.isModalActive = false;
 
-      let user = this.$store.state.login[0];
-
       axios
-        .delete(`${urlAPI}redacao/${this.redacao_id}/delete`, user.req)
+        .delete(`${urlAPI}redacao/${this.redacao_id}/delete`, this.userKey.req)
         .then((res) => {
           console.log(res);
-          barramento.deletarRedacao()
+          barramento.deletarRedacao();
         })
         .catch((err) => {
           console.log(err);
         });
     },
+  },
+  created() {
+    this.userKey = JSON.parse(localStorage.getItem("userKey"));
   },
 };
 </script>

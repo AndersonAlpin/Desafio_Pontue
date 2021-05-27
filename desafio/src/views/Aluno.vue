@@ -55,7 +55,7 @@ export default {
   data() {
     return {
       currentTab: 0,
-      aluno_id: "",
+      userKey: null,
       name: "Aluno",
       redacoes: [], //Lista de redações
       req: [], //Recebe o cabeçalho com o token de autenticação
@@ -99,11 +99,10 @@ export default {
     });
 
     barramento.quandoDeletarRedacao((result) => {
-      let userState = this.$store.state.login[0];
       
       if(result)
       axios
-        .get(`${urlAPI}index/aluno/${userState.aluno_id}`, userState.req)
+        .get(`${urlAPI}index/aluno/${this.userKey.aluno_id}`, this.userKey.req)
         .then((res) => {
           this.redacoes = res.data.data;
         })
@@ -112,11 +111,11 @@ export default {
         });
     });
 
-    let user = this.$store.state.login[0];
-
+     this.userKey = JSON.parse(localStorage.getItem('userKey'))
+    
     // Listar ID principal das redações automaticamente após login
     axios
-      .get(`${urlAPI}index/aluno/${user.aluno_id}`, user.req)
+      .get(`${urlAPI}index/aluno/${this.userKey.aluno_id}`, this.userKey.req)
       .then((res) => {
         this.redacoes = res.data.data;
       })

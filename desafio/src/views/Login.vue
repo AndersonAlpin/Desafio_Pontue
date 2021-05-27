@@ -3,7 +3,12 @@
     <div class="box">
       <b-field label="E-mail">
         <ValidationProvider name="email" rules="required" v-slot="{ errors }">
-          <b-input placeholder="Informe seu e-mail" type="email" name="email" v-model="emailField" />
+          <b-input
+            placeholder="Informe seu e-mail"
+            type="email"
+            name="email"
+            v-model="emailField"
+          />
           <span class="message">{{ errors[0] }}</span>
         </ValidationProvider>
       </b-field>
@@ -68,17 +73,13 @@ export default {
               aluno_id: res.data.aluno_id,
             };
 
-            setLocalStorage(this.user);
-
-            let req = {
+            this.user.req = {
               headers: {
                 Authorization: `Bearer ${this.user.token}`,
               },
             };
 
-            this.user.req = req;
-
-            this.$store.state.login.push(this.user);
+            setLocalStorage(this.user);
 
             this.user.role == "admin"
               ? this.$router.push({ name: "Admin" })

@@ -44,6 +44,7 @@ export default {
   data() {
     return {
       files: [],
+      userKey: null,
       msg: null,
     };
   },
@@ -53,7 +54,6 @@ export default {
         const formData = new FormData();
         this.files.forEach((file) => formData.append("file", file, file.name));
         console.log(formData);
-        let user = this.$store.state.login[0];
 
         axios
           .post(
@@ -61,7 +61,7 @@ export default {
             {
               file: formData,
             },
-            user.req
+            this.userKey.req
           )
           .then((res) => {
             console.log(res);
@@ -79,6 +79,9 @@ export default {
       this.files.splice(index, 1);
     },
   },
+  created() {
+    this.userKey = JSON.parse(localStorage.getItem('userKey'))
+  }
 };
 </script>
 

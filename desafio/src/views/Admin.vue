@@ -41,6 +41,7 @@ export default {
       name: "Administrador",
       currentTab: 0,
       alunos: [],
+      userKey: null,
       visibleTab: {
         lista: true,
         visualizar: false,
@@ -68,10 +69,10 @@ export default {
       this.visibleTab.lista = true;
     })
 
-    let user = this.$store.state.login[0];
+    this.userKey = JSON.parse(localStorage.getItem('userKey'))
 
     axios
-      .get(`${urlAPI}index/admin`, user.req)
+      .get(`${urlAPI}index/admin`, this.userKey.req)
       .then((res) => {
         this.alunos = res.data.data;
       })

@@ -50,7 +50,7 @@
             @click="openRedacao(props.row.url)"
           />
           <!-- Editar redação -->
-          <template v-if="user == 'Aluno'">
+          <template v-if="userKey.aluno_id != null">
             <b-button
               class="button"
               type="is-warning"
@@ -79,7 +79,7 @@ export default {
   data() {
     return {
       redacao: [],
-      user: null,
+      userKey: null,
     };
   },
   methods: {
@@ -99,13 +99,11 @@ export default {
       if(result) this.redacao = []
     })
 
-    let user = this.$store.state.login[0];
-
-    user.aluno_id ? (this.user = "Aluno") : (this.user = "Admin");
+    this.userKey = JSON.parse(localStorage.getItem('userKey'))
 
     barramento.quandoExibirTabVisualizar((id) => {
       axios
-        .get(`${urlAPI}redacao/${id}`, user.req)
+        .get(`${urlAPI}redacao/${id}`, this.userKey.req)
         .then((res) => {
           this.redacao = res.data.data.urls;
         })
