@@ -82,9 +82,3 @@ export default {
   },
 };
 </script>
-
-<style>
-#tabs{
-  margin-top: 30px;
-}
-</style>

@@ -27,6 +27,3 @@ export default {
   props: ["name", "logout"],
 };
 </script>
-
-<style>
-</style>

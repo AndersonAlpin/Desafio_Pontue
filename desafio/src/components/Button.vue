@@ -9,6 +9,3 @@ export default {
   props: ["action", "type", "icon", "name"],
 };
 </script>
-
-<style>
-</style>

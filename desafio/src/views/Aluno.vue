@@ -127,20 +127,12 @@ export default {
 </script>
 
 <style>
-.page-title {
-  margin: 20px 0;
-}
-
 #tabs {
-  padding: 20px 100px;
+  padding: 50px 100px;
 }
 
 #buttons {
   display: flex;
   justify-content: center;
-}
-
-#tabs{
-  margin-top: 30px;
 }
 </style>

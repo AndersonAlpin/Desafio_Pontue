@@ -30,6 +30,3 @@ export default {
   props: ["isModalActive"],
 };
 </script>
-
-<style>
-</style>

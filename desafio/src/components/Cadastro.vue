@@ -24,7 +24,7 @@
       </span>
     </div>
 
-    <div class="message-login">
+    <div class="message-cadastro">
       <span v-if="msg">{{ msg }}</span>
     </div>
 
@@ -51,16 +51,18 @@ export default {
   methods: {
     uploadRedacao() {
       if (this.files.length > 0) {
-        const formData = new FormData();
-        this.files.forEach((file) => formData.append("file", file, file.name));
-        console.log(formData);
+        let formData = new FormData();
+
+        for (let key in this.files) {
+          Array.isArray(this.files[key])
+            ? this.files[key].forEach((value) => formData.append(key + "[]", value))
+            : formData.append(key, this.files[key]);
+        }
 
         axios
           .post(
             `${urlAPI}alunos/redacao/create`,
-            {
-              file: formData,
-            },
+            { file: formData },
             this.userKey.req
           )
           .then((res) => {
@@ -80,8 +82,8 @@ export default {
     },
   },
   created() {
-    this.userKey = JSON.parse(localStorage.getItem('userKey'))
-  }
+    this.userKey = JSON.parse(localStorage.getItem("userKey"));
+  },
 };
 </script>
 
@@ -90,7 +92,7 @@ export default {
   margin-top: 20px;
 }
 
-.message-login {
+.message-cadastro {
   font-size: 16px;
   color: rgb(230, 88, 88);
   text-align: center;

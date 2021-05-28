@@ -1,5 +1,5 @@
 <template>
-  <div id="tab-cadastro">
+  <div id="tab-edicao">
     <b-field>
       <b-upload v-model="file" multiple drag-drop expanded>
         <section class="section">
@@ -24,7 +24,7 @@
       </span>
     </div>
 
-    <div class="message-login">
+    <div class="message-edicao">
       <span v-if="msg">{{ msg }}</span>
     </div>
 
@@ -67,11 +67,11 @@ export default {
 </script>
 
 <style>
-#tab-cadastro {
+#tab-edicao {
   margin-top: 20px;
 }
 
-.message-login {
+.message-edicao {
   font-size: 16px;
   color: rgb(230, 88, 88);
   text-align: center;
